@@ -13,7 +13,7 @@ Text Domain: simple-forum
 */
 @session_start();
 if ( !function_exists( 'add_action' ) ) {
-	exit;
+    exit;
 }
 
 define( 'PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -32,4 +32,5 @@ if ( is_admin() ) {
     require_once( PLUGIN_DIR . 'class.simple-forum-admin.php' );
     $pa = new SimpleForumAdmin();
     add_action( 'init', array($pa, 'init') );
+    
 }

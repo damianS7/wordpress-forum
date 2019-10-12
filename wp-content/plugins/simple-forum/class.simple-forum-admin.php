@@ -9,8 +9,8 @@ class SimpleForumAdmin {
     public function plugin_menu() {		
         add_menu_page('SimpleForum', 'SimpleForum', 'manage_options', 'simple-forum-basic', array($this, 'view_basic') );
         add_submenu_page( 'simpleforum-basic', 'SimpleForum', 'Basic', 'manage_options', 'simpleforum-basic', array($this, 'view_basic' ) );
-        add_submenu_page( 'simpleforum-basic', 'SimpleForum', 'Captcha', 'manage_options', 'simpleforum-captcha', array($this, 'view_basic' ) );
-        add_submenu_page( 'simpleforum-basic', 'SimpleForum', 'Security', 'manage_options', 'simpleforum-security', array($this, 'view_basic' ) );
+        add_submenu_page( 'simpleforum-captcha', 'SimpleForum', 'Captcha', 'manage_options', 'simpleforum-captcha', array($this, 'view_basic' ) );
+        add_submenu_page( 'simpleforum-security', 'SimpleForum', 'Security', 'manage_options', 'simpleforum-security', array($this, 'view_basic' ) );
        
     }
 

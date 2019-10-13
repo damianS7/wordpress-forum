@@ -9,6 +9,5 @@
 			</h4>
 			<p class="card-text"><?php echo $category['description']; ?></p>
 		</div>
-		<?php endforeach; ?>
-	</div>
+	<?php endforeach; ?>
 </div>

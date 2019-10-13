@@ -1,11 +1,11 @@
 <?php
 
+// Front-end
 class SimpleForum {
     
     // Acciones a llevar a cabo cuando el plugin es activado
     public function plugin_activation() {
         global $wpdb;
-        
         
         $queryUsers = "CREATE TABLE IF NOT EXISTS SPF_USERS(
             id INT AUTO_INCREMENT NOT NULL,
@@ -51,7 +51,6 @@ class SimpleForum {
             PRIMARY KEY(spf_key)
         )";
                             
-                            
         $wpdb->query($queryUsers);
         $wpdb->query($queryCategories);
         $wpdb->query($queryTopics);
@@ -59,6 +58,12 @@ class SimpleForum {
         $wpdb->query($querySettings);
                             
         //add_option( 'fmk', '' );
+    }
+
+    // Forma segura de obtener valores de $_GET
+    public function get_query_var( $var, $default = '1' ) {
+        global $wp_query;
+        return $wp_query->get( $var, $default );
     }
                         
     // Acciones a llevar a cabo cuando el plugin es desactivado (deshacer todo lo hecho en activacion)
@@ -93,7 +98,7 @@ class SimpleForum {
                         
     // Shortcode para mostrar el foro en una pagina
     public function show_forum($atts) {
-        include_once(PLUGIN_DIR . 'frontend/forum.php');
+        include_once(PLUGIN_DIR . 'include/forum.php');
     }
                         
     public function init_hooks() {
@@ -107,9 +112,7 @@ class SimpleForum {
         wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css');
         wp_enqueue_style('prefix_bootstrap');
                             
-                            
-        wp_register_style('spf_style', plugins_url('simple-forum/frontend/css/spf.css'));
-                            
+        wp_register_style('spf_style', plugins_url('simple-forum/include/css/spf.css'));
         wp_enqueue_style('spf_style');
                             
         $this->init_hooks();

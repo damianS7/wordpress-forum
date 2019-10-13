@@ -106,14 +106,16 @@ class SimpleForum {
     }
                         
     public function init() {
-        wp_register_script('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js');
+        //wp_register_script('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js');
+        wp_register_script('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js');
         wp_enqueue_script('prefix_bootstrap');
-                            
-        wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css');
+          
+        wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
+        //wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css');
         wp_enqueue_style('prefix_bootstrap');
                             
         wp_register_style('spf_style', plugins_url('simple-forum/include/css/spf.css'));
-        wp_enqueue_style('spf_style');
+        //wp_enqueue_style('spf_style');
                             
         $this->init_hooks();
     }

@@ -6,6 +6,6 @@ if(isset($_POST['save'])) {
 }
 ?>
 <div class="wrap">
-    <h1>Basic</h1>
+    <h1>CATEGORIES</h1>
     
 </div>

@@ -7,15 +7,27 @@ class SimpleForumAdmin {
     }
 
     public function plugin_menu() {		
-        add_menu_page('SimpleForum', 'Simple Forum', 'manage_options', 'simpleforum-menu', array($this, 'view_basic') );
-        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Basic', 'manage_options', 'simpleforum-basic', array($this, 'view_basic' ) );
-        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Captcha', 'manage_options', 'simpleforum-captcha', array($this, 'view_basic' ) );
-        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Security', 'manage_options', 'simpleforum-security', array($this, 'view_basic' ) );
+        add_menu_page('SimpleForum', 'Simple Forum', 'manage_options', 'simpleforum-menu', array($this, 'view_settings') );
+        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Moderation', 'manage_options', 'simpleforum-moderation', array($this, 'view_moderation' ) );
+        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Users', 'manage_options', 'simpleforum-users', array($this, 'view_users' ) );
+        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Categories', 'manage_options', 'simpleforum-categories', array($this, 'view_categories' ) );
         
     }
 
-    public function view_basic() {
-        include_once( PLUGIN_DIR . 'views/basic.php' );
+    public function view_settings() {
+        include_once( PLUGIN_DIR . 'admin/views/settings.php' );
+    }
+
+    public function view_moderation() {
+        include_once( PLUGIN_DIR . 'admin/views/moderation.php' );
+    }
+
+    public function view_users() {
+        include_once( PLUGIN_DIR . 'admin/views/users.php' );
+    }
+
+    public function view_categories() {
+        include_once( PLUGIN_DIR . 'admin/views/categories.php' );
     }
 
     public function register_mysettings() {

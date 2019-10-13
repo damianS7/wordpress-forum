@@ -32,5 +32,11 @@ if ( is_admin() ) {
     require_once( PLUGIN_DIR . 'class.simple-forum-admin.php' );
     $pa = new SimpleForumAdmin();
     add_action( 'init', array($pa, 'init') );
-    
 }
+
+if (!is_admin() ) {
+    add_action( 'init', array($p, 'init') );
+
+    $dir = plugin_dir_path( __FILE__ );
+    //include($dir . "frontend/forum.php");
+}   

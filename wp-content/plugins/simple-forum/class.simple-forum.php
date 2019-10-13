@@ -61,7 +61,7 @@ class SimpleForum {
     }
 
     // Forma segura de obtener valores de $_GET
-    public function get_query_var( $var, $default = '1' ) {
+    public function get_query_var( $var, $default = '' ) {
         global $wp_query;
         return $wp_query->get( $var, $default );
     }
@@ -86,12 +86,12 @@ class SimpleForum {
         return $wpdb->get_results("SELECT id, name, description FROM SPF_CATEGORIES", ARRAY_A);
     }
                         
-    public function spf_have_topics($cat_id = 1) {
+    public function spf_have_topics($cat_id = -1) {
         global $wpdb;
         return $wpdb->get_results("SELECT SPF_TOPICS.id, SPF_TOPICS.title, SPF_USERS.username AS author FROM SPF_TOPICS INNER JOIN SPF_USERS ON SPF_TOPICS.author_id = SPF_USERS.id WHERE cat_id = '{$cat_id}'", ARRAY_A);
     }
                         
-    public function spf_show_topic($topic_id = 1) {
+    public function spf_show_topic($topic_id = -1) {
         global $wpdb;
         return $wpdb->get_results("SELECT SPF_POSTS.post_content, SPF_POSTS.posted_at, SPF_USERS.username FROM SPF_POSTS INNER JOIN SPF_USERS ON SPF_POSTS.author_id = SPF_USERS.id WHERE topic_id = '{$topic_id}'", ARRAY_A);
     }

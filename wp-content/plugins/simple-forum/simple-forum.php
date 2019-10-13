@@ -35,3 +35,8 @@ if ( is_admin() ) {
     add_action( 'init', array($pa, 'init') );
 }
 
+add_filter('query_vars', 'add_my_var');
+function add_my_var($public_query_vars) {
+    $public_query_vars[] = 'topic';
+    return $public_query_vars;
+}

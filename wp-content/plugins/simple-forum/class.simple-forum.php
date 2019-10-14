@@ -22,8 +22,10 @@ class SimpleForum {
                         
     public function spf_get_topics($cat_id = 1) {
         global $wpdb;
-        return $wpdb->get_results("SELECT SPF_TOPICS.id, SPF_TOPICS.title, SPF_USERS.username AS author FROM SPF_TOPICS INNER JOIN SPF_USERS ON SPF_TOPICS.author_id = SPF_USERS.id WHERE cat_id = '{$cat_id}'", ARRAY_A);
+        return $wpdb->get_results("SELECT t_topics.id, t_topics.title, t_topics.created_at, t_users.username AS author, t_cats.name AS subforum, (SELECT count(*) FROM SPF_POSTS WHERE SPF_POSTS.topic_id=t_topics.id) AS total_posts FROM SPF_TOPICS AS t_topics INNER JOIN SPF_USERS AS t_users ON t_topics.author_id = t_users.id INNER JOIN SPF_CATEGORIES AS t_cats ON t_topics.cat_id = t_cats.id WHERE cat_id = '{$cat_id}'", ARRAY_A);
     }
+
+    
                         
     public function spf_get_topic($topic_id = 1) {
         global $wpdb;

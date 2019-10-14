@@ -21,13 +21,15 @@ define( 'PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
 require_once( PLUGIN_DIR . 'class.simple-forum.php' );
+$spf_init = new SimpleForum();
 
-$p = new SimpleForum();
-register_activation_hook( __FILE__, array( $p, 'plugin_activation' ) );
-register_deactivation_hook( __FILE__, array( $p, 'plugin_deactivation' ) );
-register_uninstall_hook( __FILE__, array( $p, 'plugin_uninstall' ) );
+require_once( PLUGIN_DIR . 'install.php' );
+$spf_install = new SimpleForumInstall();
+register_activation_hook( __FILE__, array( $spf_install, 'plugin_activation' ) );
+register_deactivation_hook( __FILE__, array( $spf_install, 'plugin_deactivation' ) );
+//register_uninstall_hook( __FILE__, array( $spf_install, 'plugin_uninstall' ) );
 
-add_action( 'init', array( $p, 'init' ) );
+add_action( 'init', array( $spf_init, 'init' ) );
 
 if ( is_admin() ) {
     require_once( PLUGIN_DIR . 'admin/simple-forum-admin.php' );
@@ -35,8 +37,39 @@ if ( is_admin() ) {
     add_action( 'init', array($pa, 'init') );
 }
 
-add_filter('query_vars', 'add_my_var');
-function add_my_var($public_query_vars) {
-    $public_query_vars[] = 'topic';
+add_filter('query_vars', 'add_custom_vars');
+function add_custom_vars($public_query_vars) {
+    // Variables de la vista register.php
+    $public_query_vars[] = 'spf_register_username';
+    $public_query_vars[] = 'spf_register_password';
+    $public_query_vars[] = 'spf_register_mail';
+
+    // topics.php
+    $public_query_vars[] = 'spf_topics_topic_id';
+    $public_query_vars[] = 'spf_topics_topic_title';
+    $public_query_vars[] = 'spf_topics_cat_id';
+    $public_query_vars[] = 'spf_topics_user_id';
+    $public_query_vars[] = 'spf_topics_post_content';
+
+    // posts.php
+    $public_query_vars[] = 'spf_posts_topic_id';
+    $public_query_vars[] = 'spf_posts_user_id';
+    $public_query_vars[] = 'spf_posts_content';
+
+
+    // login.php
+
+    // register.php
+    $public_query_vars[] = 'spf_register_username';
+    $public_query_vars[] = 'spf_register_password';
+    $public_query_vars[] = 'spf_register_mail';
+
+    // reset.php
+
+    // forums.php
+
+    // Otros
+    $public_query_vars[] = 'spf_submit';
     return $public_query_vars;
 }
+

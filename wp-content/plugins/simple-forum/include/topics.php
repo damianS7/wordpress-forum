@@ -13,19 +13,30 @@ if(get_query_var('page') == 0) {
 }
 
 ?>
-<div class="card text-white bg-primary mb-3">
-	<div class="card-header">CATEGORY X</div>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="<?php echo $this->get_current_url(); ?>">Home</a></li>
+	<?php if( !empty( get_query_var('spf_topic') ) ): ?>
+		<li class="breadcrumb-item"><a href="?spf-cat=<?php echo get_query_var('spf_cat'); ?>">Category ...</a></li>
+		<li class="breadcrumb-item active">Topic X</li>
+	<?php elseif( !empty (get_query_var('spf_cat') ) ): ?>
+		<li class="breadcrumb-item active">Category X</li>
+	<?php endif; ?>
+</ol>
+
+<ul class="list-group">
 	<?php foreach ( $this->spf_get_topics( get_query_var('page') ) as $topic ): // Listado de categorias ?>
-		<div class="card-body">
-			<h4 class="card-title">
-				<a href="<?php echo home_url() . "/spf-posts/". $topic['id']; ?>">
-					<?php echo $topic['author']; ?>
-				</a>
-			</h4>
-			<p class="card-text"><?php echo $topic['title']; ?></p>
-		</div>
+		<li class="list-group-item d-flex justify-content-between align-items-center">
+			<a href="<?php echo home_url() . "/spf-posts/". $topic['id']; ?>">
+				<?php echo $topic['title']; ?>
+			</a>
+			<span class="badge badge-primary"><?php echo $topic['subforum']; ?></span>
+			<span class="badge badge-primary"><?php echo $topic['author']; ?></span>
+			<span class="badge badge-primary "><?php echo $topic['created_at']; ?></span>
+			<span class="badge badge-primary badge-pill"><?php echo $topic['total_posts']; ?></span>	
+		</li>		
 	<?php endforeach; ?>
-</div>
+</ul>
+<hr/>
 <?php // if user is logged ?>
 <form method="POST" action="">
   <fieldset>

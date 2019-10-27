@@ -7,7 +7,7 @@ class SimpleForumInstall {
     public function plugin_activation() {
         global $wpdb;
 
-        $queryUsers = 'CREATE TABLE IF NOT EXISTS SPF_USERS(
+        $queryUsers = 'CREATE TABLE IF NOT EXISTS SPF_USERS (
             id INT AUTO_INCREMENT NOT NULL,s
             username VARCHAR(50) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
@@ -15,7 +15,7 @@ class SimpleForumInstall {
             PRIMARY KEY(id)
         ) ENGINE=InnoDB;';
 
-        $queryCategories = 'CREATE TABLE IF NOT EXISTS SPF_CATEGORIES (
+        $queryForums = 'CREATE TABLE IF NOT EXISTS SPF_FORUMS (
             id INT AUTO_INCREMENT NOT NULL,
             name VARCHAR(50) NOT NULL UNIQUE,
             description VARCHAR(255) NOT NULL,
@@ -51,7 +51,7 @@ class SimpleForumInstall {
         ) ENGINE=InnoDB;';
 
         $wpdb->query($queryUsers);
-        $wpdb->query($queryCategories);
+        $wpdb->query($queryForums);
         $wpdb->query($queryTopics);
         $wpdb->query($queryPosts);
         $wpdb->query($querySettings);
@@ -70,7 +70,7 @@ class SimpleForumInstall {
         $wpdb->query("DROP TABLE IF EXISTS SPF_SETTINGS");
         //$wpdb->query("DROP TABLE IF EXISTS SPF_POSTS");
         //$wpdb->query("DROP TABLE IF EXISTS SPF_TOPICS");
-        //$wpdb->query("DROP TABLE IF EXISTS SPF_CATEGORIES");
+        //$wpdb->query("DROP TABLE IF EXISTS SPF_FORUMS");
         //$wpdb->query("DROP TABLE IF EXISTS SPF_USERS");
         $this->spf_delete_pages();
     }

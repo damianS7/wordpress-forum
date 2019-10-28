@@ -7,10 +7,10 @@ class SimpleForumAdmin {
     }
 
     public function plugin_menu() {		
-        add_menu_page('SimpleForum', 'Simple Forum', 'manage_options', 'simpleforum-menu', array($this, 'view_settings') );
-        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Moderation', 'manage_options', 'simpleforum-moderation', array($this, 'view_moderation' ) );
-        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Users', 'manage_options', 'simpleforum-users', array($this, 'view_users' ) );
-        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Categories', 'manage_options', 'simpleforum-categories', array($this, 'view_categories' ) );
+        add_menu_page('SimpleForum', 'Simple Forum', 'manage_options', 'simpleforum-menu', [$this, 'view_settings'] );
+        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Moderation', 'manage_options', 'simpleforum-moderation', [$this, 'view_moderation' ] );
+        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Users', 'manage_options', 'simpleforum-users', [$this, 'view_users' ] );
+        add_submenu_page( 'simpleforum-menu', 'SimpleForum', 'Categories', 'manage_options', 'simpleforum-categories', [$this, 'view_categories' ] );
         
     }
 
@@ -35,7 +35,7 @@ class SimpleForumAdmin {
     }
 
     public function init() {
-        add_action( 'admin_menu', array( $this, 'plugin_menu' ) );
-        add_action( 'admin_menu', array( $this, 'register_mysettings' ) );
+        add_action( 'admin_menu', [ $this, 'plugin_menu' ] );
+        add_action( 'admin_menu', [ $this, 'register_mysettings' ] );
     }
 }

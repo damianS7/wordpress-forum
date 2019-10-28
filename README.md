@@ -10,6 +10,8 @@ Aunque el plugin crea las paginas necesarias de manera automatica al instalarse 
 [show_spf_topics]
 [show_spf_login]
 
+Una vez activado el plugin, puedes agregar las paginas a tu menu para acceder a ellas.
+
 ## Requisitos
 - Habilitar mod_rewrite de apache2
 

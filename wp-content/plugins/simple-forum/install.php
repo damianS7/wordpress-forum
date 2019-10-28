@@ -101,6 +101,10 @@ class SimpleForumInstall {
         $wpdb->delete('wp_posts', array(
             'post_content' => '[spf_show_reset]',
         ));
+
+        $wpdb->delete('wp_posts', array(
+            'post_content' => '[spf_profile]',
+        ));
     }
 
     // Crea las paginas que muestran las diferentes partes de la aplicacion
@@ -155,6 +159,14 @@ class SimpleForumInstall {
             'post_type'    => 'page',
         );
 
+        $profile_page = array(
+            'post_title'   => wp_strip_all_tags('SPF PROFILE'),
+            'post_content' => '[spf_profile]',
+            'post_status'  => 'publish',
+            'post_author'  => 1,
+            'post_type'    => 'page',
+        );
+
         // Insert the post into the database
         wp_insert_post($forums_page);
         wp_insert_post($topics_page);
@@ -162,5 +174,6 @@ class SimpleForumInstall {
         wp_insert_post($login_page);
         wp_insert_post($register_page);
         wp_insert_post($reset_page);
+        wp_insert_post($profile_page);
     }
 }

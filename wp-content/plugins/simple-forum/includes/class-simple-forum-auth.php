@@ -3,7 +3,7 @@
 class SimpleForumAuth {
     public static function auth($username, $password) {
         global $wpdb;
-        $query = "SELECT * FROM SPF_USERS WHERE username = '{$username}' AND password = '{$password}'";
+        $query = "SELECT * FROM SPF_ACCOUNTS WHERE username = '{$username}' AND password = '{$password}'";
 
         $row = $wpdb->get_row($query);
 

@@ -5,13 +5,13 @@ class SimpleForumAccount {
     private $password;
     private $email;
 
-    public static function getAccount() {
+    public static function get_account() {
     }
 
-    public static function createAccount($username, $password, $email) {
+    public static function create_account($username, $password, $email) {
         global $wpdb;
 
-        $table = 'SPF_USERS';
+        $table = 'SPF_ACCOUNTS';
         $data = array(
                 'username' => $username,
                 'password' => $password,

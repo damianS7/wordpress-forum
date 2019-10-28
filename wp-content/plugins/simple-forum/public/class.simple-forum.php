@@ -13,6 +13,11 @@ class SimpleForum {
         include_once(PLUGIN_DIR . $view);
     }
 
+    // Controlador de la vista profile
+    public function spf_view_profile() {
+        return $this->spf_view('public/views/profile.php', $data);
+    }
+
     // Controlador de la vista "forums.php"
     public function spf_view_forums($atts) {
         $data['forums'] = SimpleForumSubForum::get_forums();
@@ -112,7 +117,7 @@ class SimpleForum {
             $pass = sanitize_text_field($_POST['password']);
             $mail = sanitize_email($_POST['email']);
 
-            if (!SimpleForumAccount::createAccount($user, $pass, $mail)) {
+            if (!SimpleForumAccount::create_account($user, $pass, $mail)) {
                 $data['error_message'] = "Error al crear la cuenta.";
                 return $this->spf_view('public/views/register.php', $data);
             }
@@ -187,6 +192,7 @@ class SimpleForum {
         $this->spf_check_forbbiden_for_auth();
         $this->spf_check_logout_request();
         //add_action('spf_login_redirect', array( $this, 'spf_new_topic_redirect' ));
+        add_shortcode('spf_profile', array($this, 'spf_view_profile'));
         add_shortcode('spf_show_forums', array($this, 'spf_view_forums'));
         add_shortcode('spf_show_topics', array($this, 'spf_view_topics'));
         add_shortcode('spf_show_posts', array($this, 'spf_view_posts'));

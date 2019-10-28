@@ -1,4 +1,5 @@
 <?php if (SimpleForumAuth::is_auth()): ?>
+<div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -10,7 +11,7 @@
             Welcome <strong><?php echo $_SESSION['account']->username;?></strong>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Profile</a>
+            <a class="nav-link" href="<?php echo home_url() . '/spf-profile'; ?>">Profile</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="<?php echo home_url() . '/spf-logout'; ?>">Logout</a>
@@ -22,4 +23,5 @@
         </form>
     </div>
     </nav>
+</div>
 <?php endif; ?>

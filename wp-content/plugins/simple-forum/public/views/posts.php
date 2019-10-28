@@ -12,6 +12,19 @@
       </div>
     <?php endforeach; ?>
   </div>
+  <div class="mt-2">
+    <ul class="pagination pagination-sm">
+      <li class="page-item disabled">
+        <a class="page-link" href="#">&laquo;</a>
+      </li>
+      <li class="page-item active">
+        <a class="page-link" href="#">1</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="#">&raquo;</a>
+      </li>
+    </ul>
+  </div>
 <?php endif; ?>
 <?php if (SimpleForumAuth::is_auth()): ?>
 <form method="POST" action="">

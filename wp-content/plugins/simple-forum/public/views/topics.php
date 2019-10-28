@@ -15,16 +15,22 @@
 			</li>
 		<?php endforeach; ?>
 	</ul>
-<div class="btn-group" role="group" aria-label="Basic example">
-<form action="">
-  <button type="button" class="btn btn-secondary">First page</button>
-  <button type="button" class="btn btn-secondary">Previous</button>
-  <button type="button" class="btn btn-secondary">Next</button>
-  <button type="submit" class="btn btn-secondary" name="last">Last page</button>
-</form>
+
+<div class="mt-2">
+  <ul class="pagination pagination-sm">
+    <li class="page-item disabled">
+      <a class="page-link" href="#">&laquo;</a>
+    </li>
+    <li class="page-item active">
+      <a class="page-link" href="#">1</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" href="#">&raquo;</a>
+    </li>
+  </ul>
 </div>
 <?php endif; ?>
-<hr />
+
 <?php if (SimpleForumAuth::is_auth()): ?>
 	<form method="POST" action="">
 		<fieldset>

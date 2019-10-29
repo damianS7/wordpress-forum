@@ -1,10 +1,6 @@
 <?php
 
-class SimpleForumAccount {
-    private $username;
-    private $password;
-    private $email;
-
+class SPF_AccountModel {
     public static function get_account() {
     }
 
@@ -13,9 +9,9 @@ class SimpleForumAccount {
 
         $table = 'SPF_ACCOUNTS';
         $data = array(
-                'username' => $username,
-                'password' => $password,
-                'email' => $email
+            'username' => $username,
+            'password' => $password,
+            'email' => $email
         );
         $format = array('%s', '%s','%s');
 

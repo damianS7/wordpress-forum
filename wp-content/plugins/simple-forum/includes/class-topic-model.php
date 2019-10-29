@@ -1,6 +1,6 @@
 <?php
 
-class SimpleForumTopic {
+class SPF_TopicModel {
 
     // Agrega un nuevo topic a una categoria
     public static function create_topic($cat_id, $author_id, $title, $content) {
@@ -19,7 +19,7 @@ class SimpleForumTopic {
         }
 
         $topic_id = $wpdb->insert_id;
-        $post_id = SimpleForumTopic::add_post($topic_id, $author_id, $content);
+        $post_id = SPF_TopicModel::add_post($topic_id, $author_id, $content);
 
         if ($post_id === null) {
             return null;
@@ -30,7 +30,16 @@ class SimpleForumTopic {
 
     public static function get_posts($topic_id = 1) {
         global $wpdb;
-        return $wpdb->get_results("SELECT SPF_POSTS.post_content, SPF_POSTS.posted_at, SPF_ACCOUNTS.username FROM SPF_POSTS INNER JOIN SPF_ACCOUNTS ON SPF_POSTS.author_id = SPF_ACCOUNTS.id WHERE topic_id = '{$topic_id}'", ARRAY_A);
+        $query = "SELECT
+            SPF_POSTS.post_content, 
+            SPF_POSTS.posted_at, 
+            SPF_ACCOUNTS.username 
+            FROM SPF_POSTS 
+            INNER JOIN SPF_ACCOUNTS 
+            ON SPF_POSTS.author_id = SPF_ACCOUNTS.id 
+            WHERE topic_id = '{$topic_id}'";
+
+        return $wpdb->get_results($query, ARRAY_A);
     }
 
     // Agrega un nuevo post a un topic ya iniciado
@@ -63,16 +72,12 @@ class SimpleForumTopic {
             t_topics.created_at,
             t_users.username AS author,
             t_cats.name AS subforum 
-            FROM
-            SPF_TOPICS AS t_topics 
-            INNER JOIN
-                SPF_ACCOUNTS AS t_users 
-                ON t_topics.author_id = t_users.id 
-            INNER JOIN
-                SPF_FORUMS AS t_cats 
-                ON t_topics.cat_id = t_cats.id 
-            WHERE
-                t_topics.id = '{$topic_id}'";
+            FROMbSPF_TOPICS AS t_topics 
+            INNER JOIN SPF_ACCOUNTS AS t_users 
+            ON t_topics.author_id = t_users.id 
+            INNER JOIN SPF_FORUMS AS t_cats 
+            ON t_topics.cat_id = t_cats.id 
+            WHERE t_topics.id = '{$topic_id}'";
         return $wpdb->get_row($query);
     }
 }

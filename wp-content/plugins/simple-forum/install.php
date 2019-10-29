@@ -7,33 +7,33 @@ class SimpleForumInstall {
     public function plugin_activation() {
         global $wpdb;
 
-        $queryUsers = 'CREATE TABLE IF NOT EXISTS SPF_ACCOUNTS (
-            id INT AUTO_INCREMENT NOT NULL,s
+        $query_accounts = 'CREATE TABLE IF NOT EXISTS SPF_ACCOUNTS (
+            id INT AUTO_INCREMENT NOT NULL,
             username VARCHAR(50) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             email VARCHAR(100) NOT NULL UNIQUE,
             PRIMARY KEY(id)
         ) ENGINE=InnoDB;';
 
-        $queryForums = 'CREATE TABLE IF NOT EXISTS SPF_FORUMS (
+        $query_forums = 'CREATE TABLE IF NOT EXISTS SPF_FORUMS (
             id INT AUTO_INCREMENT NOT NULL,
             name VARCHAR(50) NOT NULL UNIQUE,
             description VARCHAR(255) NOT NULL,
             PRIMARY KEY(id)
         ) ENGINE=InnoDB;';
 
-        $queryTopics = 'CREATE TABLE IF NOT EXISTS SPF_TOPICS (
+        $query_topics = 'CREATE TABLE IF NOT EXISTS SPF_TOPICS (
             id INT AUTO_INCREMENT NOT NULL,
             cat_id INT NOT NULL,
             author_id INT NOT NULL,
             title VARCHAR(100) NOT NULL,
             created_at TIMESTAMP NOT NULL,
             PRIMARY KEY(id),
-            FOREIGN KEY(cat_id) REFERENCES SPF_CATEGORIES(id),
-            FOREIGN KEY(author_id) REFERENCES SPF_USERS(id)
+            FOREIGN KEY(cat_id) REFERENCES SPF_FORUMS(id),
+            FOREIGN KEY(author_id) REFERENCES SPF_ACCOUNTS(id)
         ) ENGINE=InnoDB;';
 
-        $queryPosts = 'CREATE TABLE IF NOT EXISTS SPF_POSTS (
+        $query_posts = 'CREATE TABLE IF NOT EXISTS SPF_POSTS (
             id INT AUTO_INCREMENT NOT NULL,
             topic_id INT NOT NULL,
             author_id INT NOT NULL,
@@ -41,20 +41,20 @@ class SimpleForumInstall {
             posted_at TIMESTAMP NOT NULL,
             PRIMARY KEY(id),
             FOREIGN KEY(topic_id) REFERENCES SPF_TOPICS(id),
-            FOREIGN KEY(author_id) REFERENCES SPF_USERS(id)
+            FOREIGN KEY(author_id) REFERENCES SPF_ACCOUNTS(id)
         ) ENGINE=InnoDB;';
 
-        $querySettings = 'CREATE TABLE IF NOT EXISTS SPF_SETTINGS (
+        $query_settings = 'CREATE TABLE IF NOT EXISTS SPF_SETTINGS (
             spf_key VARCHAR(50) NOT NULL UNIQUE,
             spf_value TEXT,
             PRIMARY KEY(spf_key)
         ) ENGINE=InnoDB;';
 
-        $wpdb->query($queryUsers);
-        $wpdb->query($queryForums);
-        $wpdb->query($queryTopics);
-        $wpdb->query($queryPosts);
-        $wpdb->query($querySettings);
+        $wpdb->query($query_accounts);
+        $wpdb->query($query_forums);
+        $wpdb->query($query_topics);
+        $wpdb->query($query_posts);
+        $wpdb->query($query_settings);
         
         $this->spf_create_pages();
     }
@@ -79,31 +79,31 @@ class SimpleForumInstall {
     public function spf_delete_pages() {
         global $wpdb;
         $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_show_forums]',
+            'post_content' => '[spf_view_forums]',
         ));
 
         $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_show_topics]',
+            'post_content' => '[spf_view_topics]',
         ));
 
         $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_show_posts]',
+            'post_content' => '[spf_view_posts]',
         ));
 
         $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_show_login]',
+            'post_content' => '[spf_view_signin]',
         ));
 
         $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_show_register]',
+            'post_content' => '[spf_view_signup]',
         ));
 
         $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_show_reset]',
+            'post_content' => '[spf_view_reset]',
         ));
 
         $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_profile]',
+            'post_content' => '[spf_view_profile]',
         ));
     }
 
@@ -112,48 +112,48 @@ class SimpleForumInstall {
     public function spf_create_pages() {
         // Create post object
         $forums_page = array(
-            'post_title'   => wp_strip_all_tags('SPF SHOW FORUMS'),
-            'post_content' => '[spf_show_forums]',
+            'post_title'   => wp_strip_all_tags('SPF FORUMS'),
+            'post_content' => '[spf_view_forums]',
             'post_status'  => 'publish',
             'post_author'  => 1,
             'post_type'    => 'page',
         );
 
         $topics_page = array(
-            'post_title'   => wp_strip_all_tags('SPF SHOW TOPICS'),
-            'post_content' => '[spf_show_topics]',
+            'post_title'   => wp_strip_all_tags('SPF TOPICS'),
+            'post_content' => '[spf_view_topics]',
             'post_status'  => 'publish',
             'post_author'  => 1,
             'post_type'    => 'page',
         );
 
         $posts_page = array(
-            'post_title'   => wp_strip_all_tags('SPF SHOW POSTS'),
-            'post_content' => '[spf_show_posts]',
+            'post_title'   => wp_strip_all_tags('SPF POSTS'),
+            'post_content' => '[spf_view_posts]',
             'post_status'  => 'publish',
             'post_author'  => 1,
             'post_type'    => 'page',
         );
 
         $login_page = array(
-            'post_title'   => wp_strip_all_tags('SPF SHOW LOGIN'),
-            'post_content' => '[spf_show_login]',
+            'post_title'   => wp_strip_all_tags('SPF SIGNIN'),
+            'post_content' => '[spf_view_signin]',
             'post_status'  => 'publish',
             'post_author'  => 1,
             'post_type'    => 'page',
         );
 
         $register_page = array(
-            'post_title'   => wp_strip_all_tags('SPF SHOW REGISTER'),
-            'post_content' => '[spf_show_register]',
+            'post_title'   => wp_strip_all_tags('SPF SIGNUP'),
+            'post_content' => '[spf_view_signup]',
             'post_status'  => 'publish',
             'post_author'  => 1,
             'post_type'    => 'page',
         );
 
         $reset_page = array(
-            'post_title'   => wp_strip_all_tags('SPF SHOW RESET'),
-            'post_content' => '[spf_show_reset]',
+            'post_title'   => wp_strip_all_tags('SPF RESET'),
+            'post_content' => '[spf_view_reset]',
             'post_status'  => 'publish',
             'post_author'  => 1,
             'post_type'    => 'page',
@@ -161,7 +161,7 @@ class SimpleForumInstall {
 
         $profile_page = array(
             'post_title'   => wp_strip_all_tags('SPF PROFILE'),
-            'post_content' => '[spf_profile]',
+            'post_content' => '[spf_view_profile]',
             'post_status'  => 'publish',
             'post_author'  => 1,
             'post_type'    => 'page',

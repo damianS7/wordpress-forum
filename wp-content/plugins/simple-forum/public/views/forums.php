@@ -6,7 +6,7 @@
 		<?php foreach ($data['forums'] as $forum): // Listado de categorias?>
 			<div class="card-body">
 				<h4 class="card-title">
-					<a href="<?php echo home_url() . "/spf-show-topics/". $forum['id']; ?>" class="card-link">
+					<a href="<?php echo get_permalink() . "topics/". $forum['id']; ?>" class="card-link">
 						<?php echo $forum['name']; ?>
 					</a>
 				</h4>

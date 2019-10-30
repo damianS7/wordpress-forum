@@ -5,7 +5,7 @@
 		<?php foreach ($data['topics'] as $topic) : // Listado de categorias
             ?>
 			<li class="list-group-item d-flex justify-content-between align-items-center">
-				<a href="<?php echo home_url() . "/spf-show-post/" . $topic['id']; ?>">
+				<a href="<?php echo get_permalink() . "posts/" . $topic['id']; ?>">
 					<?php echo $topic['title']; ?>
 				</a>
 				<span class="badge badge-primary"><?php echo $topic['subforum']; ?></span>
@@ -31,7 +31,7 @@
 </div>
 <?php endif; ?>
 
-<?php if (SimpleForumAuth::is_auth()): ?>
+<?php if (SPF_Auth::is_auth()): ?>
 	<form method="POST" action="">
 		<fieldset>
 			<div class="form-group row">

@@ -26,17 +26,16 @@
     </ul>
   </div>
 <?php endif; ?>
-<?php if (SimpleForumAuth::is_auth()): ?>
+<?php if (SPF_Auth::is_auth()): ?>
 <form method="POST" action="">
   <fieldset>
     <div class="form-group">
       <label for="exampleTextarea">Say something in this post ...</label>
-      <textarea class="form-control" name="spf_posts_content" rows="3"></textarea>
+      <textarea class="form-control" name="content" rows="3"></textarea>
     </div>
     <button type="submit" name="spf_submit" class="btn btn-block btn-primary">NEW POST</button>
   </fieldset>
-  <input type="hidden" name="spf_posts_user_id" value="1">
-  <input type="hidden" name="spf_posts_topic_id" value="<?php echo get_query_var('page'); ?>">
+  <input type="hidden" name="topic_id" value="<?php echo get_query_var('page'); ?>">
 </form>
 <?php else: ?>
 Please create an account to send an answer

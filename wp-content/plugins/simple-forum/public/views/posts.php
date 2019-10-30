@@ -26,7 +26,7 @@
     </ul>
   </div>
 <?php endif; ?>
-<?php if (SPF_Auth::is_auth()): ?>
+<?php if (SPF_AccountController::is_auth()): ?>
 <form method="POST" action="">
   <fieldset>
     <div class="form-group">

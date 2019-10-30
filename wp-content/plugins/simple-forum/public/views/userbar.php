@@ -1,4 +1,4 @@
-<?php if (SPF_Auth::is_auth()): ?>
+<?php if (SPF_AccountController::is_auth()): ?>
 <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">

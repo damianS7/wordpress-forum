@@ -3,11 +3,11 @@
 class SPF_TopicModel {
 
     // Agrega un nuevo topic a una categoria
-    public static function create_topic($cat_id, $author_id, $title, $content) {
+    public static function create_topic($forum_id, $author_id, $title, $content) {
         global $wpdb;
         $table = 'SPF_TOPICS';
         $data = array(
-            'cat_id' => $cat_id,
+            'forum_id' => $forum_id,
             'author_id' => $author_id,
             'title' => $title
         );
@@ -21,11 +21,11 @@ class SPF_TopicModel {
         $topic_id = $wpdb->insert_id;
         $post_id = SPF_TopicModel::add_post($topic_id, $author_id, $content);
 
-        if ($post_id === null) {
-            return null;
+        if ($post_id !== null) {
+            return $topic_id;
         }
-
-        return $topic_id;
+        
+        return null;
     }
 
     public static function get_posts($topic_id = 1) {
@@ -67,16 +67,16 @@ class SPF_TopicModel {
         global $wpdb;
         $query = "SELECT
             t_topics.id,
-            t_topics.cat_id,
+            t_topics.forum_id,
             t_topics.title,
             t_topics.created_at,
             t_users.username AS author,
-            t_cats.name AS subforum 
-            FROMbSPF_TOPICS AS t_topics 
+            t_forums.name AS subforum 
+            FROM SPF_TOPICS AS t_topics 
             INNER JOIN SPF_ACCOUNTS AS t_users 
             ON t_topics.author_id = t_users.id 
-            INNER JOIN SPF_FORUMS AS t_cats 
-            ON t_topics.cat_id = t_cats.id 
+            INNER JOIN SPF_FORUMS AS t_forums 
+            ON t_topics.forum_id = t_forums.id 
             WHERE t_topics.id = '{$topic_id}'";
         return $wpdb->get_row($query);
     }

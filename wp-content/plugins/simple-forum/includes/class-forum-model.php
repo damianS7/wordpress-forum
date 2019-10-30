@@ -27,8 +27,8 @@ class SPF_ForumModel {
             INNER JOIN SPF_ACCOUNTS AS t_users 
             ON t_topics.author_id = t_users.id 
             INNER JOIN SPF_FORUMS AS t_cats 
-            ON t_topics.cat_id = t_cats.id 
-            WHERE cat_id = '{$forum_id}'";
+            ON t_topics.forum_id = t_cats.id 
+            WHERE forum_id = '{$forum_id}'";
         return $wpdb->get_results($query, ARRAY_A);
     }
 }

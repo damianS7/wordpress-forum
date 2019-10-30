@@ -79,31 +79,7 @@ class SimpleForumInstall {
     public function spf_delete_pages() {
         global $wpdb;
         $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_view_forums]',
-        ));
-
-        $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_view_topics]',
-        ));
-
-        $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_view_posts]',
-        ));
-
-        $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_view_signin]',
-        ));
-
-        $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_view_signup]',
-        ));
-
-        $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_view_reset]',
-        ));
-
-        $wpdb->delete('wp_posts', array(
-            'post_content' => '[spf_view_profile]',
+            'post_title' => 'SPF FORUM',
         ));
     }
 
@@ -111,69 +87,15 @@ class SimpleForumInstall {
     // una pagina para el foro, otra para el formulario de registro etc...
     public function spf_create_pages() {
         // Create post object
-        $forums_page = array(
-            'post_title'   => wp_strip_all_tags('SPF FORUMS'),
-            'post_content' => '[spf_view_forums]',
-            'post_status'  => 'publish',
-            'post_author'  => 1,
-            'post_type'    => 'page',
-        );
-
-        $topics_page = array(
-            'post_title'   => wp_strip_all_tags('SPF TOPICS'),
-            'post_content' => '[spf_view_topics]',
-            'post_status'  => 'publish',
-            'post_author'  => 1,
-            'post_type'    => 'page',
-        );
-
-        $posts_page = array(
-            'post_title'   => wp_strip_all_tags('SPF POSTS'),
-            'post_content' => '[spf_view_posts]',
-            'post_status'  => 'publish',
-            'post_author'  => 1,
-            'post_type'    => 'page',
-        );
-
-        $login_page = array(
-            'post_title'   => wp_strip_all_tags('SPF SIGNIN'),
-            'post_content' => '[spf_view_signin]',
-            'post_status'  => 'publish',
-            'post_author'  => 1,
-            'post_type'    => 'page',
-        );
-
-        $register_page = array(
-            'post_title'   => wp_strip_all_tags('SPF SIGNUP'),
-            'post_content' => '[spf_view_signup]',
-            'post_status'  => 'publish',
-            'post_author'  => 1,
-            'post_type'    => 'page',
-        );
-
-        $reset_page = array(
-            'post_title'   => wp_strip_all_tags('SPF RESET'),
-            'post_content' => '[spf_view_reset]',
-            'post_status'  => 'publish',
-            'post_author'  => 1,
-            'post_type'    => 'page',
-        );
-
-        $profile_page = array(
-            'post_title'   => wp_strip_all_tags('SPF PROFILE'),
-            'post_content' => '[spf_view_profile]',
+        $shortcode_page = array(
+            'post_title'   => wp_strip_all_tags('SPF FORUM'),
+            'post_content' => '[spf_forum]',
             'post_status'  => 'publish',
             'post_author'  => 1,
             'post_type'    => 'page',
         );
 
         // Insert the post into the database
-        wp_insert_post($forums_page);
-        wp_insert_post($topics_page);
-        wp_insert_post($posts_page);
-        wp_insert_post($login_page);
-        wp_insert_post($register_page);
-        wp_insert_post($reset_page);
-        wp_insert_post($profile_page);
+        wp_insert_post($shortcode_page);
     }
 }

@@ -31,4 +31,54 @@ if (is_admin()) {
 
 require_once(PLUGIN_DIR . 'public/class.simple-forum.php');
 $spf_init = new SimpleForum();
+add_action('init', 'custom_rewrite_basic');
+add_filter('query_vars', 'add_custom_query_var');
 add_action('init', array( $spf_init, 'init' ));
+
+function add_custom_query_var($vars) {
+    $vars[] = "spf_forum_id";
+    $vars[] = "spf_topic_id";
+    $vars[] = "spf_pagination";
+    $vars[] = "spf_view";
+    return $vars;
+}
+
+function custom_rewrite_basic() {
+    // Funciona para el page id que concuerda con la pagina spf-test (222)
+    // Extraer nuestro page id, guardarlo en la bd al instalar?
+    // post get_the_id??
+    
+    // Listado de "topics" de un foro
+    // "example.com/wordpress/spf-forum/topics/{forum_id}"
+    add_rewrite_rule(
+        '^spf-forum/topics/([^/]*)/?',
+        'index.php?page_id=222&spf_view=topics&spf_forum_id=$matches[1]',
+        'top'
+    );
+
+    // Listado de "posts" de un topic
+    // "example.com/wordpress/spf-forum/posts/{topic_id}"
+    add_rewrite_rule(
+        '^spf-forum/posts/([^/]*)/?',
+        'index.php?page_id=222&spf_view=posts&spf_topic_id=$matches[1]',
+        'top'
+    );
+
+    // Muestra la vista indicada en "spf_view"
+    // "example.com/spf-forum/{vista}"
+    add_rewrite_rule(
+        '^spf-forum/([^/]*)/?',
+        'index.php?page_id=222&spf_view=$matches[1]',
+        'top'
+    );
+    
+    // Vista principal por defecto "forums"
+    // "example.com/wordpress/spf-forum/" -> "example.com/wordpress/spf-forum/forums"
+    add_rewrite_rule(
+        '^spf-forum/?',
+        'index.php?page_id=222&spf_view=forums',
+        'top'
+    );
+
+    flush_rewrite_rules();
+}

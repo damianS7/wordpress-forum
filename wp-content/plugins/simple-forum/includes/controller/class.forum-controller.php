@@ -26,7 +26,7 @@ class SPF_ForumController {
                 $topic_id = SPF_Forum::create_topic($forum_id, $user_id, $title, $content);
 
                 if ($topic_id !== null) {
-                    return SimpleForum::redirect_js(get_permalink() . 'posts/' . $topic_id);
+                    return SimpleForum::redirect_js('posts/' . $topic_id);
                 }
 
                 $data['error_message'] = "sorry topic has not been created.";
@@ -66,6 +66,4 @@ class SPF_ForumController {
         $data['posts'] = SPF_Forum::get_posts($topic_id);
         return SimpleForum::view('posts.php', $data);
     }
-
-    
 }

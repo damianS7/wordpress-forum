@@ -19,7 +19,7 @@ class SPF_Forum {
         }
 
         $topic_id = $wpdb->insert_id;
-        $post_id = SPF_TopicModel::add_post($topic_id, $author_id, $content);
+        $post_id = SPF_Forum::add_post($topic_id, $author_id, $content);
 
         if ($post_id !== null) {
             return $topic_id;

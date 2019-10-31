@@ -1,3 +1,4 @@
+<?php include_once('userbar.php'); ?>
 <form method="POST">
 	<div class="form-group">
 		<label for="username">Username</label>
@@ -13,7 +14,7 @@
 		<input type="password" class="form-control" name="password" placeholder="Password">
 	</div>
 	<div class="form-group">
-		<input type="password" class="form-control" placeholder="Repeat password">
+		<input type="password" class="form-control" name="password2" placeholder="Repeat password">
 	</div>
 	<button class="btn btn-lg btn-primary btn-block" name="submit" type="submit">REGISTER</button>
 </form>

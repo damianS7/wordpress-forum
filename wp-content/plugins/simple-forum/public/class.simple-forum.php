@@ -28,6 +28,8 @@ class SimpleForum {
                 return SPF_AccountController::reset_controller();
             case "profile":
                 return SPF_AccountController::profile_controller();
+            case "logout":
+                return SPF_AccountController::logout_controller();
             default: // Vista por defecto si no se escoge una valida
                 return SPF_ForumController::forums_controller();
         }
@@ -48,30 +50,21 @@ class SimpleForum {
     }
 
     // Redirecion usando js
-    public static function redirect_js($url) {
+    public static function redirect_js($view) {
+        $url = home_url() . '/spf-forum/' . $view;
         $string = '<script type="text/javascript">';
         $string .= 'window.location = "' . $url . '"';
         $string .= '</script>';
         echo $string;
     }
     
-    public function spf_start_session() {
+    public function start_session() {
         @session_start();
     }
 
-    public function spf_check_logout_request() {
-        if (strpos($_SERVER['REQUEST_URI'], 'spf-forum/logout') !== false) {
-            if (SPF_AccountController::is_auth()) {
-                SPF_AccountController::logout();
-                wp_redirect(home_url() . '/spf-forum/signin');
-                exit;
-            }
-        }
-    }
-
-    public function spf_check_forbbiden_for_auth() {
+    public function check_forbbiden_for_auth() {
         // Si estamos en la pagina de login
-        if (strpos($_SERVER['REQUEST_URI'], 'spf-forum/signin') !== false) {
+        if (strpos($_SERVER['REQUEST_URI'], 'spf-forum/login') !== false) {
             // y estamos logeados, se hace redirect
             if (SPF_AccountController::is_auth()) {
                 wp_redirect(home_url() . '/spf-forum/forums');
@@ -87,9 +80,8 @@ class SimpleForum {
         // PROFILE
         // BUSCAR POSTS
         // CONFIGURACION DESDE PANEL AdmiNISTRADOR
-        $this->spf_start_session();
-        $this->spf_check_forbbiden_for_auth();
-        $this->spf_check_logout_request();
+        $this->start_session();
+        $this->check_forbbiden_for_auth();
         // add_action('spf_login_redirect', array( $this, 'spf_new_topic_redirect' ));
         add_shortcode('spf_forum', array($this, 'view_controller'));
     }

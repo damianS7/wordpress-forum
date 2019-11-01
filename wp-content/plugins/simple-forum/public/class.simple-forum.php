@@ -73,6 +73,23 @@ class SimpleForum {
         return $wpdb->get_row($query)->value;
     }
 
+    // Metodo que devuelve la url completa de una vista
+    public static function view_url($view = '') {
+        if (empty($view)) {
+            $view = SimpleForum::get_query_var('spf_view');
+        }
+        
+        if ($view == 'posts') {
+            $url = SimpleForum::get_query_var('spf_topic_id');
+        }
+        
+        if ($view == 'topics') {
+            $url = SimpleForum::get_query_var('spf_forum_id');
+        }
+        
+        return get_permalink() . $view . '/' . $url . '/';
+    }
+
     public function check_forbbiden_for_auth() {
         // Si estamos en la pagina de login
         if (strpos($_SERVER['REQUEST_URI'], 'spf-forum/login') !== false) {
@@ -86,7 +103,6 @@ class SimpleForum {
 
     public function init_hooks() {
         // TODO LIST
-        // PAGINACION
         // MEJORA DE LA UI
         // PROFILE
         // BUSCAR POSTS

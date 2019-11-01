@@ -48,18 +48,33 @@ function custom_rewrite_basic() {
     $plugin_page_id = SimpleForum::get_setting('plugin_page_id');
     
     // Listado de "topics" de un foro
-    // "example.com/wordpress/spf-forum/topics/{forum_id}"
+    // "example.com/wordpress/spf-forum/topics/{forum_id}/{pagination}"
+    add_rewrite_rule(
+        '^spf-forum/topics/([^/]*)/([^/]*)/?',
+        'index.php?page_id=' . $plugin_page_id . '&spf_view=topics&spf_forum_id=$matches[1]&spf_pagination=$matches[2]',
+        'top'
+    );
+
+    // "example.com/wordpress/spf-forum/topics/{forum_id}/1"
     add_rewrite_rule(
         '^spf-forum/topics/([^/]*)/?',
-        'index.php?page_id=' . $plugin_page_id . '&spf_view=topics&spf_forum_id=$matches[1]',
+        'index.php?page_id=' . $plugin_page_id . '&spf_view=topics&spf_forum_id=$matches[1]&spf_pagination=1',
         'top'
     );
 
     // Listado de "posts" de un topic
+    // "example.com/wordpress/spf-forum/posts/{topic_id}/{pagination}"
+    add_rewrite_rule(
+        '^spf-forum/posts/([^/]*)/([^/]*)/?',
+        'index.php?page_id=' . $plugin_page_id . '&spf_view=posts&spf_topic_id=$matches[1]&spf_pagination=$matches[2]',
+        'top'
+    );
+
+    // Listado de "posts" de un topic con la pagina 1 por defecto
     // "example.com/wordpress/spf-forum/posts/{topic_id}"
     add_rewrite_rule(
         '^spf-forum/posts/([^/]*)/?',
-        'index.php?page_id=' . $plugin_page_id . '&spf_view=posts&spf_topic_id=$matches[1]',
+        'index.php?page_id=' . $plugin_page_id . '&spf_view=posts&spf_topic_id=$matches[1]&spf_pagination=1',
         'top'
     );
 

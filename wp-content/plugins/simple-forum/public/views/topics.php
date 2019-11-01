@@ -16,19 +16,7 @@
 		<?php endforeach; ?>
 	</ul>
 
-<div class="mt-2">
-  <ul class="pagination pagination-sm">
-    <li class="page-item disabled">
-      <a class="page-link" href="#">&laquo;</a>
-    </li>
-    <li class="page-item active">
-      <a class="page-link" href="#">1</a>
-    </li>
-    <li class="page-item">
-      <a class="page-link" href="#">&raquo;</a>
-    </li>
-  </ul>
-</div>
+<?php include_once('pagination.php'); ?>
 <?php endif; ?>
 
 <?php if (SPF_AccountController::is_auth()): ?>
@@ -50,13 +38,4 @@
 <?php else: ?>
 Please create an account to start a topic
 <?php endif; ?>
-<?php if (!empty($data['error_message'])): ?>
-<div class="alert alert-danger">
-  <?php echo $data['error_message']; ?>
-</div>
-<?php endif; ?>
-<?php if (!empty($data['success_message'])): ?>
-<div class="alert alert-success">
-  <?php echo $data['success_message']; ?>
-</div>
-<?php endif; ?>
+<?php include_once('message.php'); ?>

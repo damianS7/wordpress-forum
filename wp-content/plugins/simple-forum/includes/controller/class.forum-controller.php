@@ -33,8 +33,25 @@ class SPF_ForumController {
             }
         }
 
+        $posts_per_page = 2; // get from db
+        $total_posts = SPF_Forum::count_topics($forum_id);
+        $pages = ceil($total_posts / $posts_per_page);
+
+        $page = SimpleForum::get_query_var('spf_pagination');
+
+        $page = filter_var($page, FILTER_VALIDATE_INT, array(
+            'options' => array(
+                'default'   => 1,
+                'min_range' => 1,
+                'max_range' => $pages
+            ),
+        ));
+
+        $offset = ($page - 1) * $posts_per_page;
+
         $data['forum'] = SPF_Forum::get_forum($forum_id);
-        $data['topics'] = SPF_Forum::get_topics($forum_id);
+        $data['topics'] = SPF_Forum::get_topics($forum_id, $posts_per_page, $offset);
+        $data['pagination'] = SPF_ForumController::get_pagination($pages, $page);
         return SimpleForum::view('topics.php', $data);
     }
 
@@ -60,10 +77,48 @@ class SPF_ForumController {
                 }
             }
         }
+
+        
+        $posts_per_page = 3; // get from db
+        $total_posts = SPF_Forum::count_posts($topic_id);
+        $pages = ceil($total_posts / $posts_per_page);
+
+        $page = SimpleForum::get_query_var('spf_pagination');
+
+        $page = filter_var($page, FILTER_VALIDATE_INT, array(
+            'options' => array(
+                'default'   => 1,
+                'min_range' => 1,
+                'max_range' => $pages
+            ),
+        ));
+
+        $offset = ($page - 1) * $posts_per_page;
         
         // Comprobacion de que pagina (id) se ha requerido
         $data['topic'] = SPF_Forum::get_topic($topic_id);
-        $data['posts'] = SPF_Forum::get_posts($topic_id);
+        $data['posts'] = SPF_Forum::get_posts($topic_id, $posts_per_page, $offset);
+        $data['pagination'] = SPF_ForumController::get_pagination($pages, $page);
         return SimpleForum::view('posts.php', $data);
+    }
+
+    public static function get_pagination($pages, $page) {
+        $prev = filter_var(($page-1), FILTER_VALIDATE_INT, array(
+            'options' => array(
+            'default' => 1,
+            'min_range' => 1,
+            'max_range' => $pages),
+        ));
+
+        return array('first' => 1,
+            'last' => $pages,
+            'prev' => $prev,
+            'next' => ($page+1),
+            'actual' => $page,
+            'pages' => $pages
+        );
+    }
+
+    public static function get_pagination_number() {
     }
 }

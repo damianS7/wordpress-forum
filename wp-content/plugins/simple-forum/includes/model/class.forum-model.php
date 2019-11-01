@@ -28,7 +28,27 @@ class SPF_Forum {
         return null;
     }
 
-    public static function get_posts($topic_id = 1) {
+    public static function get_topics($forum_id = 1, $limit = 0, $offset = 3) {
+        global $wpdb;
+        $query = "SELECT
+            t_topics.id, t_topics.title, t_topics.created_at,
+            t_users.username AS author, t_cats.name AS subforum, 
+            (SELECT count(*) 
+                FROM SPF_POSTS 
+                WHERE SPF_POSTS.topic_id=t_topics.id) AS total_posts 
+            FROM SPF_TOPICS AS t_topics 
+            INNER JOIN SPF_ACCOUNTS AS t_users 
+            ON t_topics.author_id = t_users.id 
+            INNER JOIN SPF_FORUMS AS t_cats 
+            ON t_topics.forum_id = t_cats.id 
+            WHERE forum_id = '{$forum_id}'
+            LIMIT {$limit}
+            OFFSET {$offset}";
+        return $wpdb->get_results($query, ARRAY_A);
+    }
+
+    // Este metodo devuelve un array con todos los posts de un topic
+    public static function get_posts($topic_id = 1, $limit = 0, $offset = 3) {
         global $wpdb;
         $query = "SELECT
             SPF_POSTS.post_content, 
@@ -37,9 +57,25 @@ class SPF_Forum {
             FROM SPF_POSTS 
             INNER JOIN SPF_ACCOUNTS 
             ON SPF_POSTS.author_id = SPF_ACCOUNTS.id 
-            WHERE topic_id = '{$topic_id}'";
+            WHERE topic_id = '{$topic_id}'
+            LIMIT {$limit}
+            OFFSET {$offset}";
 
         return $wpdb->get_results($query, ARRAY_A);
+    }
+
+    public static function count_posts($topic_id) {
+        global $wpdb;
+        $query = "SELECT id FROM SPF_POSTS WHERE topic_id = '{$topic_id}'";
+        $wpdb->get_results($query);
+        return $wpdb->num_rows;
+    }
+
+    public static function count_topics($forum_id) {
+        global $wpdb;
+        $query = "SELECT id FROM SPF_TOPICS WHERE forum_id = '{$forum_id}'";
+        $wpdb->get_results($query);
+        return $wpdb->num_rows;
     }
 
     // Agrega un nuevo post a un topic ya iniciado
@@ -93,22 +129,5 @@ class SPF_Forum {
             FROM SPF_FORUMS 
             WHERE id='{$forum_id}'";
         return $wpdb->get_row($query);
-    }
-
-    public static function get_topics($forum_id = 1) {
-        global $wpdb;
-        $query = "SELECT
-            t_topics.id, t_topics.title, t_topics.created_at,
-            t_users.username AS author, t_cats.name AS subforum, 
-            (SELECT count(*) 
-                FROM SPF_POSTS 
-                WHERE SPF_POSTS.topic_id=t_topics.id) AS total_posts 
-            FROM SPF_TOPICS AS t_topics 
-            INNER JOIN SPF_ACCOUNTS AS t_users 
-            ON t_topics.author_id = t_users.id 
-            INNER JOIN SPF_FORUMS AS t_cats 
-            ON t_topics.forum_id = t_cats.id 
-            WHERE forum_id = '{$forum_id}'";
-        return $wpdb->get_results($query, ARRAY_A);
     }
 }

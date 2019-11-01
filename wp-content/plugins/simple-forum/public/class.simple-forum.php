@@ -9,26 +9,26 @@ class SimpleForum {
 
     // Este metodo llama al controlador correspodiente para la pagina indicada.
     public function view_controller() {
-        // La pagina se obtiene del parametro "spf_view" de la URL
+        // La pagina se obtiene del parametro 'spf_view' de la URL
         $page = get_query_var('spf_view');
         
         // Evalua la variable y llamar a la vista correspondiente
         switch ($page) {
-            case "forums":
+            case 'forums':
                 return SPF_ForumController::forums_controller();
-            case "topics":
+            case 'topics':
                 return SPF_ForumController::topics_controller();
-            case "posts":
+            case 'posts':
                 return SPF_ForumController::posts_controller();
-            case "login":
+            case 'login':
                 return SPF_AccountController::login_controller();
-            case "register":
+            case 'register':
                 return SPF_AccountController::register_controller();
-            case "reset":
+            case 'reset':
                 return SPF_AccountController::reset_controller();
-            case "profile":
+            case 'profile':
                 return SPF_AccountController::profile_controller();
-            case "logout":
+            case 'logout':
                 return SPF_AccountController::logout_controller();
             default: // Vista por defecto si no se escoge una valida
                 return SPF_ForumController::forums_controller();

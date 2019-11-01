@@ -87,11 +87,11 @@ class SimpleForumInstall {
     // (deshacer todo lo hecho en activacion)
     public function plugin_deactivation() {
         global $wpdb;
-        $wpdb->query("DROP TABLE IF EXISTS SPF_SETTINGS");
-        $wpdb->query("DROP TABLE IF EXISTS SPF_POSTS");
-        $wpdb->query("DROP TABLE IF EXISTS SPF_TOPICS");
-        $wpdb->query("DROP TABLE IF EXISTS SPF_FORUMS");
-        $wpdb->query("DROP TABLE IF EXISTS SPF_ACCOUNTS");
+        $wpdb->query('DROP TABLE IF EXISTS SPF_SETTINGS');
+        $wpdb->query('DROP TABLE IF EXISTS SPF_POSTS');
+        $wpdb->query('DROP TABLE IF EXISTS SPF_TOPICS');
+        $wpdb->query('DROP TABLE IF EXISTS SPF_FORUMS');
+        $wpdb->query('DROP TABLE IF EXISTS SPF_ACCOUNTS');
 
         // Borra las paginas que contienen el shortcode del plugin
         $wpdb->delete('wp_posts', array(

@@ -7,14 +7,14 @@ class SPF_ForumController {
         return SimpleForum::view('forums.php', $data);
     }
 
-    // Controlador de la vista "topics.php"
+    // Controlador de la vista 'topics.php'
     public static function topics_controller() {
         $forum_id = SimpleForum::get_query_var('spf_forum_id');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Si el usuario no esta logeado no puede crear topics
             if (!SPF_AccountController::is_auth()) {
-                $data['error_message'] = "You are not logged.";
+                $data['error_message'] = 'You are not logged.';
                 return SimpleForum::view('topics.php', $data);
             }
 
@@ -29,7 +29,7 @@ class SPF_ForumController {
                     return SimpleForum::redirect_js('posts/' . $topic_id);
                 }
 
-                $data['error_message'] = "sorry topic has not been created.";
+                $data['error_message'] = 'sorry topic has not been created.';
             }
         }
 
@@ -56,7 +56,7 @@ class SPF_ForumController {
     }
 
     
-    // Controlador de la vista "posts.php"
+    // Controlador de la vista 'posts.php'
     public static function posts_controller() {
         $topic_id = SimpleForum::get_query_var('spf_topic_id');
         
@@ -64,7 +64,7 @@ class SPF_ForumController {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Si el usuario no esta logeado no puede crear topics
             if (!SPF_AccountController::is_auth()) {
-                $data['error_message'] = "You are not logged.";
+                $data['error_message'] = 'You are not logged.';
                 return SimpleForum::view('topics.php', $data);
             }
 
@@ -73,7 +73,7 @@ class SPF_ForumController {
 
             if (!empty($topic_id) && !empty($content) && !empty($user_id)) {
                 if (!SPF_Forum::add_post($topic_id, $user_id, $content)) {
-                    $data['error_message'] = "sorry post shas not been created." . $topic_id;
+                    $data['error_message'] = 'sorry post shas not been created.' . $topic_id;
                 }
             }
         }

@@ -45,8 +45,8 @@ class SimpleForumInstall {
         ) ENGINE=InnoDB;';
 
         $query_settings = 'CREATE TABLE IF NOT EXISTS SPF_SETTINGS (
-            spf_key VARCHAR(50) NOT NULL UNIQUE,
-            spf_value TEXT,
+            name VARCHAR(50) NOT NULL UNIQUE,
+            value TEXT,
             PRIMARY KEY(spf_key)
         ) ENGINE=InnoDB;';
 
@@ -56,7 +56,27 @@ class SimpleForumInstall {
         $wpdb->query($query_posts);
         $wpdb->query($query_settings);
         
-        $this->spf_create_pages();
+        // Preparamos la pagina para cargar nuestro plugin
+        $shortcode_page = array(
+            'post_title'   => wp_strip_all_tags('SPF FORUM'),
+            'post_content' => '[spf_forum]',
+            'post_status'  => 'publish',
+            'post_author'  => 1,
+            'post_type'    => 'page',
+        );
+        
+        // Creamos la pagina donde se inserta el shortcode del plugin
+        $id = wp_insert_post($shortcode_page);
+
+        // Si el $id no es null, sera un numero que contiene el id del post en la db
+        if ($id !== null) {
+            $data = array(
+                'name' => 'plugin_page_id',
+                'value' => $id
+            );
+            // Guardamos el id en las opciones del plugin
+            $wpdb->insert('SPF_SETTINGS', $data, array('%s', '%s'));
+        }
     }
 
     // Desactivar y borrar plugin
@@ -72,30 +92,10 @@ class SimpleForumInstall {
         $wpdb->query("DROP TABLE IF EXISTS SPF_TOPICS");
         $wpdb->query("DROP TABLE IF EXISTS SPF_FORUMS");
         $wpdb->query("DROP TABLE IF EXISTS SPF_ACCOUNTS");
-        $this->spf_delete_pages();
-    }
 
-    // Borra las paginas que contienen el shortcode del plugin
-    public function spf_delete_pages() {
-        global $wpdb;
+        // Borra las paginas que contienen el shortcode del plugin
         $wpdb->delete('wp_posts', array(
             'post_title' => 'SPF FORUM',
         ));
-    }
-
-    // Crea las paginas que muestran las diferentes partes de la aplicacion
-    // una pagina para el foro, otra para el formulario de registro etc...
-    public function spf_create_pages() {
-        // Create post object
-        $shortcode_page = array(
-            'post_title'   => wp_strip_all_tags('SPF FORUM'),
-            'post_content' => '[spf_forum]',
-            'post_status'  => 'publish',
-            'post_author'  => 1,
-            'post_type'    => 'page',
-        );
-
-        // Insert the post into the database
-        wp_insert_post($shortcode_page);
     }
 }

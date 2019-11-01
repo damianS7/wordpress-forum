@@ -40,7 +40,9 @@ class SimpleForum {
         if (SPF_AccountController::is_auth()) {
             $data['user'] = $_SESSION['account'];
         }
+        echo '<div class="spf-wrapper">';
         include_once(PLUGIN_DIR . 'public/views/' . $view);
+        echo '</div>';
     }
     
     // Forma segura de obtener valores de $_GET
@@ -58,8 +60,17 @@ class SimpleForum {
         echo $string;
     }
     
+    // Inicia la session
     public function start_session() {
         @session_start();
+    }
+
+    // Obtiene informacion de la tabla SPF_SETTINGS
+    public static function get_setting($name) {
+        global $wpdb;
+        $query = "SELECT value FROM SPF_SETTINGS WHERE name = '{$name}'";
+
+        return $wpdb->get_row($query)->value;
     }
 
     public function check_forbbiden_for_auth() {
@@ -82,7 +93,6 @@ class SimpleForum {
         // CONFIGURACION DESDE PANEL AdmiNISTRADOR
         $this->start_session();
         $this->check_forbbiden_for_auth();
-        // add_action('spf_login_redirect', array( $this, 'spf_new_topic_redirect' ));
         add_shortcode('spf_forum', array($this, 'view_controller'));
     }
     
@@ -94,6 +104,8 @@ class SimpleForum {
         wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
         wp_enqueue_style('prefix_bootstrap');
         wp_register_style('spf_style', plugins_url('simple-forum/public/css/spf.css'));
-        //wp_enqueue_style('spf_style');
+        wp_enqueue_style('spf_style');
+
+        wp_enqueue_style('wpb-google-fonts', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,700,300', false);
     }
 }

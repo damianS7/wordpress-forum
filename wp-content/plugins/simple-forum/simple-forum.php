@@ -44,15 +44,14 @@ function add_custom_query_var($vars) {
 }
 
 function custom_rewrite_basic() {
-    // Funciona para el page id que concuerda con la pagina spf-test (222)
-    // Extraer nuestro page id, guardarlo en la bd al instalar?
-    // post get_the_id??
+    // ID del post donde se encuentra nuestro shortcode
+    $plugin_page_id = SimpleForum::get_setting('plugin_page_id');
     
     // Listado de "topics" de un foro
     // "example.com/wordpress/spf-forum/topics/{forum_id}"
     add_rewrite_rule(
         '^spf-forum/topics/([^/]*)/?',
-        'index.php?page_id=222&spf_view=topics&spf_forum_id=$matches[1]',
+        'index.php?page_id=' . $plugin_page_id . '&spf_view=topics&spf_forum_id=$matches[1]',
         'top'
     );
 
@@ -60,7 +59,7 @@ function custom_rewrite_basic() {
     // "example.com/wordpress/spf-forum/posts/{topic_id}"
     add_rewrite_rule(
         '^spf-forum/posts/([^/]*)/?',
-        'index.php?page_id=222&spf_view=posts&spf_topic_id=$matches[1]',
+        'index.php?page_id=' . $plugin_page_id . '&spf_view=posts&spf_topic_id=$matches[1]',
         'top'
     );
 
@@ -68,7 +67,7 @@ function custom_rewrite_basic() {
     // "example.com/spf-forum/{vista}"
     add_rewrite_rule(
         '^spf-forum/([^/]*)/?',
-        'index.php?page_id=222&spf_view=$matches[1]',
+        'index.php?page_id=' . $plugin_page_id . '&spf_view=$matches[1]',
         'top'
     );
     
@@ -76,7 +75,7 @@ function custom_rewrite_basic() {
     // "example.com/wordpress/spf-forum/" -> "example.com/wordpress/spf-forum/forums"
     add_rewrite_rule(
         '^spf-forum/?',
-        'index.php?page_id=222&spf_view=forums',
+        'index.php?page_id=' . $plugin_page_id . '&spf_view=forums',
         'top'
     );
 

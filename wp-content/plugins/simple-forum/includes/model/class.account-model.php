@@ -59,4 +59,24 @@ class SPF_Account {
         // Devolvemos el ultimo id insertado, que es el id de la cuenta
         return $wpdb->insert_id;
     }
+
+    // Este metodo se encarga de actualizar los datos de una cuenta de usuario
+    public static function update_account($user_id, $username, $password, $email) {
+        global $wpdb;
+        
+        $data = array(
+            'username' => $username,
+            'password' => $password,
+            'email' => $email
+        );
+        
+        $where = array(
+            'id' => $user_id
+        );
+
+        if (!$wpdb->update('SPF_ACCOUNTS', $data, $where)) {
+            return false;
+        }
+        return true;
+    }
 }

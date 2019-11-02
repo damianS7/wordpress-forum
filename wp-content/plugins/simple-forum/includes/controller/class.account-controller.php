@@ -130,6 +130,58 @@ class SPF_AccountController {
 
     // Controlador para la vista del perfil de usuario. 'profile.php'
     public static function profile_controller() {
+        // Si el usuario no esta auth ...
+        if (!SPF_AccountController::is_auth()) {
+            $data['error_message'] = 'Acceso no autorizado.';
+            return SimpleForum::view('blank.php', $data);
+        }
+
+        // ...
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $user_id = $_SESSION['account']->id;
+            $user = sanitize_text_field($_POST['username']);
+            $actual_password = sanitize_text_field($_POST['password1']);
+            $new_password = sanitize_text_field($_POST['password2']);
+            $repeated_password = sanitize_text_field($_POST['password3']);
+            $mail = sanitize_email($_POST['email']);
+            
+            // Ningun campo puede estar vacio (excepto el de nuevo password)
+            if (empty($user) || empty($actual_password) || empty($mail)) {
+                $data['error_message'] = 'Ningun campo puede estar vacio.';
+                return SimpleForum::view('profile.php', $data);
+            }
+
+            // Si el usuario no quiere cambiar el password, ponemos la misma
+            if (empty($new_password) || empty($repeated_password)) {
+                $new_password = $actual_password;
+                $repeated_password = $actual_password;
+            }
+
+            // Comprobamos que las passwords coincidan
+            if ($new_password !== $repeated_password) {
+                $data['error_message'] = 'Las passwords no coinciden.';
+                return SimpleForum::view('profile.php', $data);
+            }
+
+            // El password no es valido
+            if (!password_verify($actual_password, $_SESSION['account']->password)) {
+                $data['error_message'] = 'Incorrect password.';
+                return SimpleForum::view('profile.php', $data);
+            }
+            
+            // Encriptamos el password
+            $pass = password_hash($new_password, PASSWORD_BCRYPT, array( 'cost' => 12 ));
+
+            if (SPF_Account::update_account($user_id, $user, $pass, $mail)) {
+                $_SESSION['account']->username = $user;
+                $_SESSION['account']->password = $pass;
+                $_SESSION['account']->email = $mail;
+                $data['success_message'] = 'Informacion actualizada.';
+            } else {
+                $data['error_message'] = 'No se pudo actualizar.';
+            }
+        }
+
         return SimpleForum::view('profile.php', $data);
     }
 }

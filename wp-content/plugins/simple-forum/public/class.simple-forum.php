@@ -28,6 +28,8 @@ class SimpleForum {
                 return SPF_AccountController::reset_controller();
             case 'profile':
                 return SPF_AccountController::profile_controller();
+            case 'search':
+                return SPF_ForumController::search_controller();
             case 'logout':
                 return SPF_AccountController::logout_controller();
             default: // Vista por defecto si no se escoge una valida
@@ -71,21 +73,37 @@ class SimpleForum {
         return $wpdb->get_row($query)->value;
     }
 
-    // Metodo que devuelve la url completa de una vista
-    public static function view_url($view = '') {
+    // Metodo que devuelve la url completa de una vista incluyendo el id
+    public static function view_url($view, $id = '') {
+        // Si no se especifica la vista, se lee desde la url
         if (empty($view)) {
             $view = SimpleForum::get_query_var('spf_view');
         }
-        
-        if ($view == 'posts') {
-            $url = SimpleForum::get_query_var('spf_topic_id');
+
+        // Si la vista es topics y no se especifica el ID, se extrae de la url
+        if ($view == 'topics' && empty($id)) {
+            $id = SimpleForum::get_query_var('spf_forum_id');
+        }
+
+        // Si la vista es posts y no se especifica el id, se extrae de la url
+        if ($view == 'posts' && empty($id)) {
+            $id = SimpleForum::get_query_var('spf_topic_id');
+        }
+
+        // Construccion de la url
+        return get_permalink() . $view . '/' . $id;
+    }
+    
+    // Metodo que genera una URL apta para el paginador
+    public static function pagination_url($view, $id, $page) {
+        $view_url = SimpleForum::view_url($view, $id);
+    
+        // Si no se indica una pagina, la pagina por defecto sera la de la url
+        if (empty($page)) {
+            $page = SimpleForum::get_query_var('spf_pagination');
         }
         
-        if ($view == 'topics') {
-            $url = SimpleForum::get_query_var('spf_forum_id');
-        }
-        
-        return get_permalink() . $view . '/' . $url . '/';
+        return $view_url . '/' . $page;
     }
 
     public function check_forbbiden_for_auth() {
@@ -101,9 +119,11 @@ class SimpleForum {
 
     public function init_hooks() {
         // TODO LIST
-        // PROFILE
-        // BUSCAR POSTS
-        // CONFIGURACION DESDE PANEL AdmiNISTRADOR
+        // PROFILE, update username, mail, password, avatar, my posts
+        // CONFIGURACION DESDE PANEL AdmiNISTRADOR, spf_settings, posts por pag/gestion foross
+        // COMENTARIOS, FORMATEO, TAB to SPACES
+        // Debug y mejora del codigo (comprobacion variables is_array ...)
+        // convertir arrays a objetos $object->method
         $this->start_session();
         $this->check_forbbiden_for_auth();
         add_shortcode('spf_forum', array($this, 'view_controller'));
@@ -112,11 +132,18 @@ class SimpleForum {
     public function init() {
         $this->init_hooks();
         wp_enqueue_style('wpb-google-fonts', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,700,300', false);
+        
+        // jQuery
+        wp_register_script('prefix_jquery', 'https://code.jquery.com/jquery-3.4.1.min.js');
+        wp_enqueue_script('prefix_jquery');
+
         wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
         wp_enqueue_style('prefix_bootstrap');
-        wp_register_script('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js');
-        wp_enqueue_script('prefix_bootstrap');
+        
         wp_register_style('spf_style', plugins_url('simple-forum/public/css/spf.css'));
         wp_enqueue_style('spf_style');
+
+        wp_register_script('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js');
+        wp_enqueue_script('prefix_bootstrap');
     }
 }

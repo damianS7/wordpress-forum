@@ -10,7 +10,7 @@
 		<li class="list-group-item align-items-center">
 			<div class="row">
 				<div class="col-sm-7">			
-					<a href="<?php echo get_permalink() . "posts/" . $topic['id']; ?>">
+					<a href="<?php echo SimpleForum::pagination_url('posts', $topic['id'], 1); ?>">
 						<?php echo $topic['title']; ?>
 					</a>
 				</div>

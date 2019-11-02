@@ -10,15 +10,15 @@
 		<li class="list-group-item align-items-center">
 			<div class="row">
 				<div class="col-sm-7">			
-					<a href="<?php echo SimpleForum::pagination_url('posts', $topic['id'], 1); ?>">
-						<?php echo $topic['title']; ?>
+					<a href="<?php echo SimpleForum::pagination_url('posts', $topic->id, 1); ?>">
+						<?php echo $topic->title; ?>
 					</a>
 				</div>
 				<div class="col-sm-5 text-right">
-					<span class="badge badge-primary"><?php echo $topic['subforum']; ?></span>
-					<span class="badge badge-primary"><?php echo $topic['author']; ?></span>
-					<span class="badge badge-primary"><?php echo $topic['created_at']; ?></span>
-					<span class="badge badge-primary badge-pill"><?php echo $topic['total_posts']; ?></span>
+					<span class="badge badge-primary"><?php echo $topic->subforum; ?></span>
+					<span class="badge badge-primary"><?php echo $topic->author; ?></span>
+					<span class="badge badge-primary"><?php echo $topic->created_at; ?></span>
+					<span class="badge badge-primary badge-pill"><?php echo $topic->total_posts; ?></span>
 				</div>
 			</div>
 		</li>

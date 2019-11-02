@@ -11,10 +11,10 @@
     <?php foreach ($data['posts'] as $post): // Listado de categorias?>
       <div class="card-body">
         <h4 class="card-title">
-          Written by <?php echo $post['username']; ?>
-          on <?php echo $post['posted_at']; ?>
+          Written by <?php echo $post->username; ?>
+          on <?php echo $post->posted_at; ?>
         </h4>
-        <p class="card-text"><?php echo $post['post_content']; ?></p>
+        <p class="card-text"><?php echo $post->post_content; ?></p>
       </div>
     <?php endforeach; ?>
   </div>

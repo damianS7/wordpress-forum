@@ -1,8 +1,9 @@
 <?php
 
+// Clase que permite extraer informacion relativa al foro de la base de datos.
 class SPF_Forum {
 
-    // Agrega un nuevo topic a una categoria
+    // Este metodo agrega un nuevo topic al foro
     public static function create_topic($forum_id, $author_id, $title, $content) {
         global $wpdb;
         $table = 'SPF_TOPICS';
@@ -18,16 +19,22 @@ class SPF_Forum {
             return null;
         }
 
+        // Recuperamos el ID del topic creado
         $topic_id = $wpdb->insert_id;
+
+        // Creamos el post y recuperamos el id
         $post_id = SPF_Forum::add_post($topic_id, $author_id, $content);
 
-        if ($post_id !== null) {
-            return $topic_id;
+        // Si el id del post es null hubo un error y no se inserto.
+        if ($post_id === null) {
+            return null;
         }
         
-        return null;
+        // Insertado con exito el topic y el post. Devolvemos el id del topic
+        return $topic_id;
     }
 
+    // Metodo para recuperar los topics de un determinado foro
     public static function get_topics($forum_id = 1, $limit = 0, $offset = 3) {
         global $wpdb;
         $query = "SELECT
@@ -44,7 +51,7 @@ class SPF_Forum {
             WHERE forum_id = '{$forum_id}'
             LIMIT {$limit}
             OFFSET {$offset}";
-        return $wpdb->get_results($query, ARRAY_A);
+        return $wpdb->get_results($query);
     }
 
     // Este metodo devuelve un array con todos los posts de un topic
@@ -61,9 +68,10 @@ class SPF_Forum {
             LIMIT {$limit}
             OFFSET {$offset}";
 
-        return $wpdb->get_results($query, ARRAY_A);
+        return $wpdb->get_results($query);
     }
 
+    // Metodo para contar los posts de un topic
     public static function count_posts($topic_id) {
         global $wpdb;
         $query = "SELECT id FROM SPF_POSTS WHERE topic_id = '{$topic_id}'";
@@ -71,6 +79,7 @@ class SPF_Forum {
         return $wpdb->num_rows;
     }
 
+    // Metodo para contar los topics de un foro
     public static function count_topics($forum_id) {
         global $wpdb;
         $query = "SELECT id FROM SPF_TOPICS WHERE forum_id = '{$forum_id}'";
@@ -98,7 +107,7 @@ class SPF_Forum {
         return $wpdb->insert_id;
     }
 
-    // Devuelve una file con los datos mas importantes del topic
+    // Metodo que devuelve los datos de un topic
     public function get_topic($topic_id = 1) {
         global $wpdb;
         $query = "SELECT
@@ -117,12 +126,14 @@ class SPF_Forum {
         return $wpdb->get_row($query);
     }
     
+    // Metodo para obtener todos los foros disponibles
     public static function get_forums() {
         global $wpdb;
         $query = "SELECT id, name, description FROM SPF_FORUMS";
-        return $wpdb->get_results($query, ARRAY_A);
+        return $wpdb->get_results($query);
     }
 
+    // Metodo para obtener un foro de terminado
     public static function get_forum($forum_id = 1) {
         global $wpdb;
         $query = "SELECT id, name, description 
@@ -131,6 +142,7 @@ class SPF_Forum {
         return $wpdb->get_row($query);
     }
 
+    // Metodo para obtener los topics en funcion de lo que el usuario busca
     public static function search_topics($query) {
         global $wpdb;
         $query = "SELECT

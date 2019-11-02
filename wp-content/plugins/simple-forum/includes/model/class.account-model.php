@@ -1,6 +1,8 @@
 <?php
-
+// Esta clase sirve para obtener informacion de la base de datos relacionados a las
+// cuentas de usuarios
 class SPF_Account {
+    
     // Metodo que comprueba la existencia de un email en la tabla ACCOUNTS
     public static function mail_exists($mail) {
         global $wpdb;

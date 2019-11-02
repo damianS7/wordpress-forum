@@ -46,19 +46,23 @@ class SPF_AccountController {
             if (SPF_AccountController::is_auth()) {
                 $data['error_message'] = 'You are already logged.';
                 return SimpleForum::view('login.php', $data);
-                //return SimpleForum::redirect_js(home_url() . '/spf-show-forums');
+                //return SimpleForum::redirect_js(SimpleForum::view_url('forums'));
             }
 
+            // Filtrado de variables introducidas por el usuario
             $user = sanitize_text_field($_POST['username']);
             $pass = sanitize_text_field($_POST['password']);
 
+            // Los campos no pueden estar vacios
             if (empty($user) || empty($pass)) {
                 $data['error_message'] = 'You must fill the fields.';
                 return SimpleForum::view('login.php', $data);
             }
 
+            // Si pasamos con exito todas las comprobaciones, iniciamos el login.
             if (SPF_AccountController::auth($user, $pass)) {
-                return SimpleForum::redirect_js('forums');
+                $url = SimpleForum::view_url('forums');
+                return SimpleForum::redirect_js($url);
             } else {
                 $data['error_message'] = 'Invalid username/password.';
             }
@@ -81,6 +85,7 @@ class SPF_AccountController {
     public static function register_controller() {
         // Se detecto el envio de un formulario via POST
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Filtrado de seguridad para los datos enviados por el usuario
             $user = sanitize_text_field($_POST['username']);
             $pass = sanitize_text_field($_POST['password']);
             $pass2 = sanitize_text_field($_POST['password2']);
@@ -88,25 +93,25 @@ class SPF_AccountController {
 
             // Ningun campo puede estar vacio
             if (empty($user) || empty($pass) || empty($pass2) || empty($mail)) {
-                $data['error_message'] = 'Ningun campo puede estar vacio.';
+                $data['error_message'] = 'All fields must be filled.';
                 return SimpleForum::view('register.php', $data);
             }
 
             // Comprobamos que el usuario no exista
             if (SPF_Account::username_exists($user)) {
-                $data['error_message'] = 'El nombre de usuario ya esta en uso.';
+                $data['error_message'] = 'This username is already in use.';
                 return SimpleForum::view('register.php', $data);
             }
             
             // Comprobamos que el correo no exista
             if (SPF_Account::mail_exists($mail)) {
-                $data['error_message'] = 'El email ya esta en uso.';
+                $data['error_message'] = 'This email is already in use.';
                 return SimpleForum::view('register.php', $data);
             }
             
             // Comprobamos que las passwords coincidan
             if ($pass !== $pass2) {
-                $data['error_message'] = 'Las passwords no coinciden.';
+                $data['error_message'] = 'Passwords does not match.';
                 return SimpleForum::view('register.php', $data);
             }
 
@@ -115,10 +120,10 @@ class SPF_AccountController {
 
             // Procedemos a la creacion de la cuenta
             if (!SPF_Account::create_account($user, $pass, $mail)) {
-                $data['error_message'] = 'Hubo un error al intentar crear la cuenta.';
+                $data['error_message'] = 'Unkown error, account not created.';
                 return SimpleForum::view('register.php', $data);
             }
-            $data['success_message'] = 'Tu cuenta ha sido creada con exito.';
+            $data['success_message'] = 'Your account has been created.';
         }
 
         return SimpleForum::view('register.php', $data);
@@ -132,34 +137,37 @@ class SPF_AccountController {
     public static function profile_controller() {
         // Si el usuario no esta auth ...
         if (!SPF_AccountController::is_auth()) {
-            $data['error_message'] = 'Acceso no autorizado.';
+            $data['error_message'] = 'Unauthorized access.';
             return SimpleForum::view('blank.php', $data);
         }
 
-        // ...
+        // Si el usuario envia datos para actualizar su cuenta ...
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // ID del usuario
             $user_id = $_SESSION['account']->id;
+
+            // Filtrado de datos enviados por el usuario
             $user = sanitize_text_field($_POST['username']);
             $actual_password = sanitize_text_field($_POST['password1']);
             $new_password = sanitize_text_field($_POST['password2']);
             $repeated_password = sanitize_text_field($_POST['password3']);
             $mail = sanitize_email($_POST['email']);
             
-            // Ningun campo puede estar vacio (excepto el de nuevo password)
-            if (empty($user) || empty($actual_password) || empty($mail)) {
-                $data['error_message'] = 'Ningun campo puede estar vacio.';
-                return SimpleForum::view('profile.php', $data);
-            }
-
             // Si el usuario no quiere cambiar el password, ponemos la misma
             if (empty($new_password) || empty($repeated_password)) {
                 $new_password = $actual_password;
                 $repeated_password = $actual_password;
             }
 
+            // Ningun campo puede estar vacio (excepto el de nuevo password)
+            if (empty($user) || empty($actual_password) || empty($mail)) {
+                $data['error_message'] = 'All fields must be filled.';
+                return SimpleForum::view('profile.php', $data);
+            }
+
             // Comprobamos que las passwords coincidan
             if ($new_password !== $repeated_password) {
-                $data['error_message'] = 'Las passwords no coinciden.';
+                $data['error_message'] = 'Passwords does not match.';
                 return SimpleForum::view('profile.php', $data);
             }
 
@@ -172,13 +180,14 @@ class SPF_AccountController {
             // Encriptamos el password
             $pass = password_hash($new_password, PASSWORD_BCRYPT, array( 'cost' => 12 ));
 
+            // Si todas las comprobacioness de seguridad pasaron con exito, actualizamos.
             if (SPF_Account::update_account($user_id, $user, $pass, $mail)) {
                 $_SESSION['account']->username = $user;
                 $_SESSION['account']->password = $pass;
                 $_SESSION['account']->email = $mail;
-                $data['success_message'] = 'Informacion actualizada.';
+                $data['success_message'] = 'Account data has been updated.';
             } else {
-                $data['error_message'] = 'No se pudo actualizar.';
+                $data['error_message'] = 'Account data can not been updated.';
             }
         }
 

@@ -1,4 +1,3 @@
-<div class="mt-3">
     <ol class="breadcrumb">
         <?php if (strpos(get_query_var('spf_view'), 'topics') !== false): ?>
             <li class="breadcrumb-item"><a href="<?php echo get_permalink() . 'forums'; ?>">SPF Forums</a></li>
@@ -11,4 +10,3 @@
             <li class="breadcrumb-item">SPF Forums</li>
         <?php endif; ?>
     </ol>
-</div>

@@ -1,5 +1,3 @@
-<?php include_once('userbar.php'); ?>
-<?php include_once('breadcrumb.php'); ?>
 <?php if (is_array($data['forums'])): ?>
     <div class="card text-white bg-primary mb-3">
         <div class="card-header">Forums</div>

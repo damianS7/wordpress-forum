@@ -1,41 +1,55 @@
-<?php include_once('userbar.php'); ?>
-<?php include_once('breadcrumb.php'); ?>
+
 <?php if (is_array($data['topics'])): ?>
+<div id="pagination-top" class="row">
+	<?php include('pagination.php'); ?>
+</div>
+<div class="row">
+	<div class="col-sm-12">
 	<ul class="list-group">
-		<?php foreach ($data['topics'] as $topic) : // Listado de categorias
-            ?>
-			<li class="list-group-item d-flex justify-content-between align-items-center">
-				<a href="<?php echo get_permalink() . "posts/" . $topic['id']; ?>">
-					<?php echo $topic['title']; ?>
-				</a>
-				<span class="badge badge-primary"><?php echo $topic['subforum']; ?></span>
-				<span class="badge badge-primary"><?php echo $topic['author']; ?></span>
-				<span class="badge badge-primary "><?php echo $topic['created_at']; ?></span>
-				<span class="badge badge-primary badge-pill"><?php echo $topic['total_posts']; ?></span>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-
-<?php include_once('pagination.php'); ?>
-<?php endif; ?>
-
-<?php if (SPF_AccountController::is_auth()): ?>
-	<form method="POST" action="">
-		<fieldset>
-			<div class="form-group row">
-				<div class="col-sm-12">
-					<input type="text" class="form-control-plaintext" name="topic_title" placeholder="Title">
+	<?php foreach ($data['topics'] as $topic) : // Listado de categorias?>
+		<li class="list-group-item align-items-center">
+			<div class="row">
+				<div class="col-sm-7">			
+					<a href="<?php echo get_permalink() . "posts/" . $topic['id']; ?>">
+						<?php echo $topic['title']; ?>
+					</a>
+				</div>
+				<div class="col-sm-5 text-right">
+					<span class="badge badge-primary"><?php echo $topic['subforum']; ?></span>
+					<span class="badge badge-primary"><?php echo $topic['author']; ?></span>
+					<span class="badge badge-primary"><?php echo $topic['created_at']; ?></span>
+					<span class="badge badge-primary badge-pill"><?php echo $topic['total_posts']; ?></span>
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="exampleTextarea">Write for your topic ...</label>
-				<textarea class="form-control" name="post_content" rows="3"></textarea>
-			</div>
-			<button type="submit" name="submit" class="btn btn-block btn-primary">NEW TOPIC</button>
-		</fieldset>
-		<input type="hidden" name="forum_id" value="<?php echo $data['forum']->id; ?>">
-	</form>
-<?php else: ?>
-Please create an account to start a topic
+		</li>
+	<?php endforeach; ?>
+</ul>
+</div>
+</div>
+<div id="pagination-bottom" class="row">
+	<?php include('pagination.php'); ?>
+</div>
 <?php endif; ?>
-<?php include_once('message.php'); ?>
+<div class="row">
+	<div class="col-sm-12">
+		<?php if (SPF_AccountController::is_auth()): ?>
+			<form method="POST">
+				<fieldset>
+					<div class="form-group row">
+						<div class="col-sm-12">
+							<input type="text" class="form-control-plaintext" name="topic_title" placeholder="Title">
+						</div>
+					</div>
+					<div class="form-group">
+						<textarea class="form-control" name="post_content" rows="4" placeholder="Say something..."></textarea>
+					</div>
+					<button type="submit" name="submit" class="btn btn-block btn-primary">NEW TOPIC</button>
+				</fieldset>
+			</form>
+		<?php else: ?>
+			<strong>
+				Please create an account to start a topic
+			</strong>
+		<?php endif; ?>
+	</div>
+</div>

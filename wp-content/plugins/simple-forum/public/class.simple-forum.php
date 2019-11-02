@@ -40,9 +40,7 @@ class SimpleForum {
         if (SPF_AccountController::is_auth()) {
             $data['user'] = $_SESSION['account'];
         }
-        echo '<div class="spf-wrapper">';
-        include_once(PLUGIN_DIR . 'public/views/' . $view);
-        echo '</div>';
+        include_once(PLUGIN_DIR . 'public/views/template.php');
     }
     
     // Forma segura de obtener valores de $_GET
@@ -103,7 +101,6 @@ class SimpleForum {
 
     public function init_hooks() {
         // TODO LIST
-        // MEJORA DE LA UI
         // PROFILE
         // BUSCAR POSTS
         // CONFIGURACION DESDE PANEL AdmiNISTRADOR
@@ -114,14 +111,12 @@ class SimpleForum {
     
     public function init() {
         $this->init_hooks();
-        //enqueue font
-        wp_register_script('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js');
-        wp_enqueue_script('prefix_bootstrap');
+        wp_enqueue_style('wpb-google-fonts', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,700,300', false);
         wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
         wp_enqueue_style('prefix_bootstrap');
+        wp_register_script('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js');
+        wp_enqueue_script('prefix_bootstrap');
         wp_register_style('spf_style', plugins_url('simple-forum/public/css/spf.css'));
         wp_enqueue_style('spf_style');
-
-        wp_enqueue_style('wpb-google-fonts', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,700,300', false);
     }
 }

@@ -121,4 +121,13 @@ class SPF_ForumController {
 
     public static function get_pagination_number() {
     }
+
+    public static function search_controller() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data['search'] = sanitize_text_field($_POST['query']);
+            $data['topics'] = SPF_Forum::search_topics($data['search']);
+        }
+
+        return SimpleForum::view('search.php', $data);
+    }
 }

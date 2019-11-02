@@ -130,4 +130,22 @@ class SPF_Forum {
             WHERE id='{$forum_id}'";
         return $wpdb->get_row($query);
     }
+
+    public static function search_topics($query) {
+        global $wpdb;
+        $query = "SELECT
+            t_topics.id,
+            t_topics.forum_id,
+            t_topics.title,
+            t_topics.created_at,
+            t_users.username AS author,
+            t_posts.post_content AS content
+            FROM SPF_TOPICS AS t_topics 
+            INNER JOIN SPF_ACCOUNTS AS t_users 
+            ON t_topics.author_id = t_users.id 
+            INNER JOIN SPF_POSTS AS t_posts
+            ON t_topics.id = t_posts.topic_id 
+            WHERE t_topics.title LIKE '%{$query}%' GROUP BY t_topics.id";
+        return $wpdb->get_results($query);
+    }
 }

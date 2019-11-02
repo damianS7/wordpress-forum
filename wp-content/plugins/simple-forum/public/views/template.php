@@ -1,7 +1,7 @@
 <div class="spf-wrapper container-fluid">
     <div id="userbar" class="row">
         <div class="col-sm-12">
-            <?php include_once('userbar.php'); ?>
+            <?php include_once('navbar.php'); ?>
         </div>
     </div>
 

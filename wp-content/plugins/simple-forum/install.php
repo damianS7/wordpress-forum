@@ -47,7 +47,7 @@ class SimpleForumInstall {
         $query_settings = 'CREATE TABLE IF NOT EXISTS SPF_SETTINGS (
             name VARCHAR(50) NOT NULL UNIQUE,
             value TEXT,
-            PRIMARY KEY(spf_key)
+            PRIMARY KEY(name)
         ) ENGINE=InnoDB;';
 
         $wpdb->query($query_accounts);

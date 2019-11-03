@@ -40,7 +40,7 @@ class SPF_AccountController {
     }
 
     // Controlador de la vista 'login.php'
-    public static function login_controller() {
+    public static function view_login() {
         $data = array();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Si el usuario no esta logeado no puede crear topics
@@ -72,7 +72,7 @@ class SPF_AccountController {
     }
 
     // Controlador para la vista 'logout.php'
-    public static function logout_controller() {
+    public static function view_logout() {
         // Si el usuario esta logeado
         if (SPF_AccountController::is_auth()) {
             // Deslogeamos al usuario
@@ -83,7 +83,7 @@ class SPF_AccountController {
     }
 
     // Controlador de la vista 'register.php'
-    public static function register_controller() {
+    public static function view_register() {
         $data = array();
 
         // Se detecto el envio de un formulario via POST
@@ -133,11 +133,11 @@ class SPF_AccountController {
     }
 
     // Controlador para la vista que cambia el password de una cuenta. 'reset.php'
-    public static function reset_controller() {
+    public static function view_reset() {
     }
 
     // Controlador para la vista del perfil de usuario. 'profile.php'
-    public static function profile_controller() {
+    public static function view_profile() {
         $data = array();
 
         // Si el usuario no esta auth ...

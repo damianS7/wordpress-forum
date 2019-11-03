@@ -15,25 +15,25 @@ class SimpleForum {
         // Evalua la variable y llamar a la vista correspondiente
         switch ($page) {
             case 'forums':
-                return SPF_ForumController::forums_controller();
+                return SPF_ForumController::view_forums();
             case 'topics':
-                return SPF_ForumController::topics_controller();
+                return SPF_ForumController::view_topics();
             case 'posts':
-                return SPF_ForumController::posts_controller();
+                return SPF_ForumController::view_posts();
             case 'login':
-                return SPF_AccountController::login_controller();
+                return SPF_AccountController::view_login();
             case 'register':
-                return SPF_AccountController::register_controller();
+                return SPF_AccountController::view_register();
             case 'reset':
-                return SPF_AccountController::reset_controller();
+                return SPF_AccountController::view_reset();
             case 'profile':
-                return SPF_AccountController::profile_controller();
+                return SPF_AccountController::view_profile();
             case 'search':
-                return SPF_ForumController::search_controller();
+                return SPF_ForumController::view_search();
             case 'logout':
-                return SPF_AccountController::logout_controller();
+                return SPF_AccountController::view_logout();
             default: // Vista por defecto si no se escoge una valida
-                return SPF_ForumController::forums_controller();
+                return SPF_ForumController::view_forums();
         }
     }
 

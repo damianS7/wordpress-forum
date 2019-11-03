@@ -2,14 +2,26 @@
 
 // Gestiona las vistas relacionadas con el foro. listado de foros/topics/posts
 class SPF_ForumController {
+
+    // Controlador de la vista "search.php"
+    public static function view_search() {
+        // Lectura de los datos enviados por el usuario
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data['search'] = sanitize_text_field($_POST['query']);
+            $data['topics'] = SPF_Forum::search_topics($data['search']);
+        }
+
+        return SimpleForum::view('search.php', $data);
+    }
+    
     // Controlador para "forums.php"
-    public static function forums_controller() {
+    public static function view_forums() {
         $data['forums'] = SPF_Forum::get_forums();
         return SimpleForum::view('forums.php', $data);
     }
 
     // Controlador de la vista 'topics.php'
-    public static function topics_controller() {
+    public static function view_topics() {
         // ID del foro
         $forum_id = SimpleForum::get_query_var('spf_forum_id');
 
@@ -80,7 +92,7 @@ class SPF_ForumController {
 
     
     // Controlador de la vista 'posts.php'
-    public static function posts_controller() {
+    public static function view_posts() {
         // ID del topic
         $topic_id = SimpleForum::get_query_var('spf_topic_id');
         
@@ -159,16 +171,5 @@ class SPF_ForumController {
             'actual' => $page,
             'pages' => $pages
         );
-    }
-
-    // Controlador de la vista "search.php"
-    public static function search_controller() {
-        // Lectura de los datos enviados por el usuario
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data['search'] = sanitize_text_field($_POST['query']);
-            $data['topics'] = SPF_Forum::search_topics($data['search']);
-        }
-
-        return SimpleForum::view('search.php', $data);
     }
 }

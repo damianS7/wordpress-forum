@@ -1,11 +1,22 @@
 <?php
+//namespace SPF\PUBLI\VIEWS;
 require_once(PLUGIN_DIR . 'public/controllers/class.account-controller.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.profile-controller.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.register-controller.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.search-controller.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.post-controller.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.topic-controller.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.reset-controller.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.login-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.forum-controller.php');
 require_once(PLUGIN_DIR . 'public/models/class.account-model.php');
 require_once(PLUGIN_DIR . 'public/models/class.forum-model.php');
 
 // Front-end
 class SimpleForum {
+    public function __autoload($classname) {
+    }
+
 
     // Este metodo llama al controlador correspodiente para la pagina indicada.
     public function view_controller() {
@@ -17,21 +28,21 @@ class SimpleForum {
             case 'forums':
                 return SPF_ForumController::view_forums();
             case 'topics':
-                return SPF_ForumController::view_topics();
+                return SPF_TopicController::view_topics();
             case 'posts':
-                return SPF_ForumController::view_posts();
+                return SPF_PostController::view_posts();
             case 'login':
-                return SPF_AccountController::view_login();
+                return SPF_LoginController::view_login();
             case 'register':
-                return SPF_AccountController::view_register();
+                return SPF_RegisterController::view_register();
             case 'reset':
-                return SPF_AccountController::view_reset();
+                return SPF_ResetController::view_reset();
             case 'profile':
-                return SPF_AccountController::view_profile();
+                return SPF_ProfileController::view_profile();
             case 'search':
-                return SPF_ForumController::view_search();
+                return SPF_SearchController::view_search();
             case 'logout':
-                return SPF_AccountController::view_logout();
+                return SPF_LogoutController::view_logout();
             default: // Vista por defecto si no se escoge una valida
                 return SPF_ForumController::view_forums();
         }
@@ -124,10 +135,6 @@ class SimpleForum {
 
     public function init_hooks() {
         $this->check_forbbiden_for_auth();
-        // COMENTARIOS, FORMATEO, TAB to SPACES
-        // Debug y mejora del codigo (comprobacion variables is_array ...)
-        // convertir arrays a objetos $object->method
-        // CONFIGURACION DESDE PANEL AdmiNISTRADOR, spf_settings, posts por pag/gestion foross
         $this->start_session();
         add_shortcode('spf_forum', array($this, 'view_controller'));
     }

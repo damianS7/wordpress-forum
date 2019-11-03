@@ -1,7 +1,7 @@
 
 <?php if (is_array($data['topics'])): ?>
 <div id="pagination-top" class="row">
-	<?php include('pagination.php'); ?>
+	<?php include(PLUGIN_DIR . 'public/includes/pagination.php'); ?>
 </div>
 <div class="row">
 	<div class="col-sm-12">
@@ -27,7 +27,7 @@
 </div>
 </div>
 <div id="pagination-bottom" class="row">
-	<?php include('pagination.php'); ?>
+	<?php include(PLUGIN_DIR . 'public/includes/pagination.php'); ?>
 </div>
 <?php endif; ?>
 <div class="row">

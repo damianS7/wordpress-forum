@@ -1,6 +1,6 @@
 <?php if (is_array($data['posts'])): ?>
 <div id="pagination-top" class="row">
-  <?php include('pagination.php'); ?>
+  <?php include(PLUGIN_DIR . 'public/includes/pagination.php'); ?>
 </div>
   <div class="card text-white bg-primary mb-3">
     <div class="card-header">
@@ -19,7 +19,7 @@
     <?php endforeach; ?>
   </div>
 <div id="pagination-bottom" class="row">
-  <?php include('pagination.php'); ?>
+  <?php include(PLUGIN_DIR . 'public/includes/pagination.php'); ?>
 </div>
 <?php endif; ?>
 <div class="row">

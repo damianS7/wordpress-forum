@@ -23,7 +23,7 @@ class SPF_Forum {
         $topic_id = $wpdb->insert_id;
 
         // Creamos el post y recuperamos el id
-        $post_id = SPF_Forum::add_post($topic_id, $author_id, $content);
+        $post_id = SPF_Forum::create_post($topic_id, $author_id, $content);
 
         // Si el id del post es null hubo un error y no se inserto.
         if ($post_id === null) {
@@ -88,7 +88,7 @@ class SPF_Forum {
     }
 
     // Agrega un nuevo post a un topic ya iniciado
-    public static function add_post($topic_id, $author_id, $content) {
+    public static function create_post($topic_id, $author_id, $content) {
         global $wpdb;
         $table = 'SPF_POSTS';
         $content = array(
@@ -108,7 +108,7 @@ class SPF_Forum {
     }
 
     // Metodo que devuelve los datos de un topic
-    public function get_topic($topic_id = 1) {
+    public static function get_topic($topic_id = 1) {
         global $wpdb;
         $query = "SELECT
             t_topics.id,

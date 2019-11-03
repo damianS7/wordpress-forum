@@ -39,7 +39,7 @@ class SPF_ForumController {
 
                 // Redirigimos al post recien creado.
                 $url = SimpleForum::view_url('topics', $topic_id);
-                return SimpleForum::redirect_js(SimpleForum::view_url($url));
+                return SimpleForum::redirect_to_url($url);
             }
         }
 
@@ -101,7 +101,7 @@ class SPF_ForumController {
             // Comprobamos que los campos no esten vacios
             if (!empty($topic_id) && !empty($content)) {
                 // Si el post no puede ser creado ...
-                if (!SPF_Forum::add_post($topic_id, $user_id, $content)) {
+                if (!SPF_Forum::create_post($topic_id, $user_id, $content)) {
                     $data['error_message'] = 'Post has not been created.';
                     return SimpleForum::view('posts.php', $data);
                 }

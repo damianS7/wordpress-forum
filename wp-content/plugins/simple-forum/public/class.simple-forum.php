@@ -1,8 +1,8 @@
 <?php
-require_once(PLUGIN_DIR . 'includes/controller/class.account-controller.php');
-require_once(PLUGIN_DIR . 'includes/controller/class.forum-controller.php');
-require_once(PLUGIN_DIR . 'includes/model/class.account-model.php');
-require_once(PLUGIN_DIR . 'includes/model/class.forum-model.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.account-controller.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.forum-controller.php');
+require_once(PLUGIN_DIR . 'public/models/class.account-model.php');
+require_once(PLUGIN_DIR . 'public/models/class.forum-model.php');
 
 // Front-end
 class SimpleForum {
@@ -52,8 +52,13 @@ class SimpleForum {
     }
 
     // Redirecion usando js
-    public static function redirect_js($view) {
-        $url = home_url() . '/spf-forum/' . $view;
+    public static function redirect_to_view($view) {
+        $url = SimpleForum::view_url($view);
+        return SimpleForum::redirect_to($url);
+    }
+
+    // Redirecion usando js
+    public static function redirect_to($url) {
         $string = '<script type="text/javascript">';
         $string .= 'window.location = "' . $url . '"';
         $string .= '</script>';
@@ -111,21 +116,19 @@ class SimpleForum {
         if (strpos($_SERVER['REQUEST_URI'], 'spf-forum/login') !== false) {
             // y estamos logeados, se hace redirect
             if (SPF_AccountController::is_auth()) {
-                wp_redirect(home_url() . '/spf-forum/forums');
+                wp_redirect(SimpleForum::view_url('forums'));
                 exit;
             }
         }
     }
 
     public function init_hooks() {
-        // TODO LIST
-        // PROFILE, update username, mail, password, avatar, my posts
-        // CONFIGURACION DESDE PANEL AdmiNISTRADOR, spf_settings, posts por pag/gestion foross
+        $this->check_forbbiden_for_auth();
         // COMENTARIOS, FORMATEO, TAB to SPACES
         // Debug y mejora del codigo (comprobacion variables is_array ...)
         // convertir arrays a objetos $object->method
+        // CONFIGURACION DESDE PANEL AdmiNISTRADOR, spf_settings, posts por pag/gestion foross
         $this->start_session();
-        $this->check_forbbiden_for_auth();
         add_shortcode('spf_forum', array($this, 'view_controller'));
     }
     
@@ -140,7 +143,7 @@ class SimpleForum {
         wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
         wp_enqueue_style('prefix_bootstrap');
         
-        wp_register_style('spf_style', plugins_url('simple-forum/public/css/spf.css'));
+        wp_register_style('spf_style', plugins_url('simple-forum/public/includes/css/spf.css'));
         wp_enqueue_style('spf_style');
 
         wp_register_script('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js');

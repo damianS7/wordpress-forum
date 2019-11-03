@@ -41,6 +41,7 @@ class SPF_AccountController {
 
     // Controlador de la vista 'login.php'
     public static function login_controller() {
+        $data = array();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Si el usuario no esta logeado no puede crear topics
             if (SPF_AccountController::is_auth()) {
@@ -61,13 +62,12 @@ class SPF_AccountController {
 
             // Si pasamos con exito todas las comprobaciones, iniciamos el login.
             if (SPF_AccountController::auth($user, $pass)) {
-                $url = SimpleForum::view_url('forums');
-                return SimpleForum::redirect_js($url);
+                return SimpleForum::redirect_to_view('forums');
             } else {
                 $data['error_message'] = 'Invalid username/password.';
             }
         }
-        
+
         return SimpleForum::view('login.php', $data);
     }
 
@@ -78,11 +78,14 @@ class SPF_AccountController {
             // Deslogeamos al usuario
             SPF_AccountController::logout();
         }
-        SimpleForum::redirect_js('login');
+
+        SimpleForum::redirect_to_view('login');
     }
 
     // Controlador de la vista 'register.php'
     public static function register_controller() {
+        $data = array();
+
         // Se detecto el envio de un formulario via POST
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Filtrado de seguridad para los datos enviados por el usuario
@@ -135,6 +138,8 @@ class SPF_AccountController {
 
     // Controlador para la vista del perfil de usuario. 'profile.php'
     public static function profile_controller() {
+        $data = array();
+
         // Si el usuario no esta auth ...
         if (!SPF_AccountController::is_auth()) {
             $data['error_message'] = 'Unauthorized access.';

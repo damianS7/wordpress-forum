@@ -1,5 +1,5 @@
 <?php
-//namespace SPF\PUBLI\VIEWS;
+
 require_once(PLUGIN_DIR . 'public/controllers/class.account-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.profile-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.register-controller.php');
@@ -12,12 +12,12 @@ require_once(PLUGIN_DIR . 'public/controllers/class.forum-controller.php');
 require_once(PLUGIN_DIR . 'public/models/class.account-model.php');
 require_once(PLUGIN_DIR . 'public/models/class.forum-model.php');
 
+
 // Front-end
 class SimpleForum {
-    public function __autoload($classname) {
+    public function __construct() {
     }
-
-
+ 
     // Este metodo llama al controlador correspodiente para la pagina indicada.
     public function view_controller() {
         // La pagina se obtiene del parametro 'spf_view' de la URL
@@ -133,6 +133,69 @@ class SimpleForum {
         }
     }
 
+    public function add_custom_query_var($vars) {
+        $vars[] = 'spf_forum_id';
+        $vars[] = 'spf_topic_id';
+        $vars[] = 'spf_pagination';
+        $vars[] = 'spf_view';
+        return $vars;
+    }
+
+    public function custom_rewrite_basic() {
+        // ID del post donde se encuentra nuestro shortcode
+        $plugin_page_id = SimpleForum::get_setting('plugin_page_id');
+    
+        // Listado de 'topics' de un foro
+        // 'example.com/wordpress/spf-forum/topics/{forum_id}/{pagination}'
+        add_rewrite_rule(
+            '^spf-forum/topics/([^/]*)/([^/]*)/?',
+            'index.php?page_id=' . $plugin_page_id . '&spf_view=topics&spf_forum_id=$matches[1]&spf_pagination=$matches[2]',
+            'top'
+        );
+
+        // 'example.com/wordpress/spf-forum/topics/{forum_id}/1'
+        add_rewrite_rule(
+            '^spf-forum/topics/([^/]*)/?',
+            'index.php?page_id=' . $plugin_page_id . '&spf_view=topics&spf_forum_id=$matches[1]&spf_pagination=1',
+            'top'
+        );
+
+        // Listado de 'posts' de un topic
+        // 'example.com/wordpress/spf-forum/posts/{topic_id}/{pagination}'
+        add_rewrite_rule(
+            '^spf-forum/posts/([^/]*)/([^/]*)/?',
+            'index.php?page_id=' . $plugin_page_id . '&spf_view=posts&spf_topic_id=$matches[1]&spf_pagination=$matches[2]',
+            'top'
+        );
+
+        // Listado de 'posts' de un topic con la pagina 1 por defecto
+        // 'example.com/wordpress/spf-forum/posts/{topic_id}'
+        add_rewrite_rule(
+            '^spf-forum/posts/([^/]*)/?',
+            'index.php?page_id=' . $plugin_page_id . '&spf_view=posts&spf_topic_id=$matches[1]&spf_pagination=1',
+            'top'
+        );
+
+        // Muestra la vista indicada en 'spf_view'
+        // 'example.com/spf-forum/{vista}'
+        add_rewrite_rule(
+            '^spf-forum/([^/]*)/?',
+            'index.php?page_id=' . $plugin_page_id . '&spf_view=$matches[1]',
+            'top'
+        );
+    
+        // Vista principal por defecto 'forums'
+        // 'example.com/wordpress/spf-forum/' -> 'example.com/wordpress/spf-forum/forums'
+        add_rewrite_rule(
+            '^spf-forum/?',
+            'index.php?page_id=' . $plugin_page_id . '&spf_view=forums',
+            'top'
+        );
+
+        flush_rewrite_rules();
+    }
+
+
     public function init_hooks() {
         $this->check_forbbiden_for_auth();
         $this->start_session();
@@ -141,6 +204,9 @@ class SimpleForum {
     
     public function init() {
         $this->init_hooks();
+        add_action('init', array( $this, 'custom_rewrite_basic' ));
+        add_filter('query_vars', array( $this, 'add_custom_query_var'));
+
         wp_enqueue_style('wpb-google-fonts', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,700,300', false);
         
         // jQuery

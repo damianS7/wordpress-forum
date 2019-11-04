@@ -33,5 +33,15 @@ class SimpleForumAdmin {
     public function init() {
         add_action('admin_menu', array( $this, 'plugin_menu' ));
         add_action('admin_menu', array( $this, 'register_mysettings' ));
+
+        // jQuery
+        wp_register_script('prefix_jquery', 'https://code.jquery.com/jquery-3.4.1.min.js');
+        wp_enqueue_script('prefix_jquery');
+
+        wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
+        wp_enqueue_style('prefix_bootstrap');
+        
+        wp_register_script('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js');
+        wp_enqueue_script('prefix_bootstrap');
     }
 }

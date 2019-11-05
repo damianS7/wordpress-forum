@@ -1,6 +1,7 @@
 <?php
 
 require_once(PLUGIN_DIR . 'public/controllers/class.account-controller.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.report-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.profile-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.register-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.search-controller.php');
@@ -38,6 +39,8 @@ class SimpleForum {
                 return SPF_RegisterController::view_register();
             case 'reset':
                 return SPF_ResetController::view_reset();
+            case 'report':
+                return SPF_ReportController::view_report();
             case 'profile':
                 return SPF_ProfileController::view_profile();
             case 'search':
@@ -99,12 +102,11 @@ class SimpleForum {
 
         // Si la vista es topics y no se especifica el ID, se extrae de la url
         if ($view == 'topics' && empty($id)) {
-            $id = SimpleForum::get_query_var('spf_forum_id');
+            $id = SimpleForum::get_query_var('spf_id');
         }
 
-        // Si la vista es posts y no se especifica el id, se extrae de la url
         if ($view == 'posts' && empty($id)) {
-            $id = SimpleForum::get_query_var('spf_topic_id');
+            $id = SimpleForum::get_query_var('spf_id');
         }
 
         // Construccion de la url
@@ -124,72 +126,39 @@ class SimpleForum {
     }
 
     public function add_custom_query_var($vars) {
-        $vars[] = 'spf_forum_id';
-        $vars[] = 'spf_topic_id';
         $vars[] = 'spf_pagination';
+        $vars[] = 'spf_id';
         $vars[] = 'spf_view';
         return $vars;
     }
 
-    public function custom_rewrite_basic() {
-        // ID del post donde se encuentra nuestro shortcode
+    public function rewrite_rules() {
         $plugin_page_id = SimpleForum::get_setting('plugin_page_id');
-    
-        // Listado de 'topics' de un foro
-        // 'example.com/wordpress/spf-forum/topics/{forum_id}/{pagination}'
         add_rewrite_rule(
-            '^spf-forum/topics/([^/]*)/([^/]*)/?',
-            'index.php?page_id=' . $plugin_page_id . '&spf_view=topics&spf_forum_id=$matches[1]&spf_pagination=$matches[2]',
+            '^spf-forum/([^/]*)/([^/]*)/([^/]*)/?',
+            'index.php?page_id=' . $plugin_page_id . '&spf_view=$matches[1]&spf_id=$matches[2]&spf_pagination=$matches[3]',
             'top'
         );
 
-        // 'example.com/wordpress/spf-forum/topics/{forum_id}/1'
         add_rewrite_rule(
-            '^spf-forum/topics/([^/]*)/?',
-            'index.php?page_id=' . $plugin_page_id . '&spf_view=topics&spf_forum_id=$matches[1]&spf_pagination=1',
+            '^spf-forum/([^/]*)/([^/]*)/?',
+            'index.php?page_id=' . $plugin_page_id . '&spf_view=$matches[1]&spf_id=$matches[2]',
             'top'
         );
 
-        // Listado de 'posts' de un topic
-        // 'example.com/wordpress/spf-forum/posts/{topic_id}/{pagination}'
-        add_rewrite_rule(
-            '^spf-forum/posts/([^/]*)/([^/]*)/?',
-            'index.php?page_id=' . $plugin_page_id . '&spf_view=posts&spf_topic_id=$matches[1]&spf_pagination=$matches[2]',
-            'top'
-        );
-
-        // Listado de 'posts' de un topic con la pagina 1 por defecto
-        // 'example.com/wordpress/spf-forum/posts/{topic_id}'
-        add_rewrite_rule(
-            '^spf-forum/posts/([^/]*)/?',
-            'index.php?page_id=' . $plugin_page_id . '&spf_view=posts&spf_topic_id=$matches[1]&spf_pagination=1',
-            'top'
-        );
-
-        // Muestra la vista indicada en 'spf_view'
-        // 'example.com/spf-forum/{vista}'
         add_rewrite_rule(
             '^spf-forum/([^/]*)/?',
             'index.php?page_id=' . $plugin_page_id . '&spf_view=$matches[1]',
             'top'
         );
-    
-        // Vista principal por defecto 'forums'
-        // 'example.com/wordpress/spf-forum/' -> 'example.com/wordpress/spf-forum/forums'
-        add_rewrite_rule(
-            '^spf-forum/?',
-            'index.php?page_id=' . $plugin_page_id . '&spf_view=forums',
-            'top'
-        );
-
         flush_rewrite_rules();
     }
 
-    public function init_hooks() {
-        $this->start_session();
-        add_shortcode('spf_forum', array($this, 'view_controller'));
+    public function init() {
+        add_action('init', array( $this, 'rewrite_rules' ), 9999);
         add_filter('query_vars', array( $this, 'add_custom_query_var'));
-        add_action('init', array( $this, 'custom_rewrite_basic' ));
+        add_shortcode('spf_forum', array($this, 'view_controller'));
+        $this->start_session();
         
         // jQuery
         wp_enqueue_style('wpb-google-fonts', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,700,300', false);

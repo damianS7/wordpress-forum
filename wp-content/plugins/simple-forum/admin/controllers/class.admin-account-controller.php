@@ -2,7 +2,19 @@
 
 class SPF_Admin_AccountController {
     public function view_accounts() {
+        $data = array();
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $username = sanitize_text_field($_POST['account_username']);
+            $data['last_search'] = $username;
+            
+            // Buscamos una cuenta
+            if (isset($_POST['search_account'])) {
+                $data['accounts'] = SPF_Admin_Account::get_account($username);
+                return SimpleForumAdmin::view('accounts.php', $data);
+            }
+
+            // A partir de aqui todos los POST incluyen el id de la cuenta
             $account_id = sanitize_text_field($_POST['account_id']);
             
             // Borrado de cuenta
@@ -24,7 +36,11 @@ class SPF_Admin_AccountController {
             
             // Ban
             if (isset($_POST['ban_account'])) {
-                if (SPF_Admin_Account::ban_account($account_id)) {
+                if ($_POST['banned'] == '1') {
+                    SPF_Admin_Account::unban_account($account_id);
+                    $data['success_message'] = 'The account has been unbanned.';
+                } else {
+                    SPF_Admin_Account::ban_account($account_id);
                     $data['success_message'] = 'The account has been banned.';
                 }
             }
@@ -32,7 +48,7 @@ class SPF_Admin_AccountController {
             // Confirm
             if (isset($_POST['confirm_account'])) {
                 if (SPF_Admin_Account::confirm_account($account_id)) {
-                    $data['success_message'] = 'The account has been confirmed.';
+                    $data['success_message'] = 'The account has been activated.';
                 }
             }
 
@@ -48,9 +64,9 @@ class SPF_Admin_AccountController {
                     }
                 }
             }
+            $data['accounts'] = SPF_Admin_Account::get_account($username);
         }
  
-        $data['accounts'] = SPF_Admin_Account::get_accounts();
-        SimpleForumAdmin::view('accounts.php', $data);
+        return SimpleForumAdmin::view('accounts.php', $data);
     }
 }

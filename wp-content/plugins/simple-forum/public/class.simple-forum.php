@@ -8,6 +8,7 @@ require_once(PLUGIN_DIR . 'public/controllers/class.post-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.topic-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.reset-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.login-controller.php');
+require_once(PLUGIN_DIR . 'public/controllers/class.logout-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.forum-controller.php');
 require_once(PLUGIN_DIR . 'public/models/class.account-model.php');
 require_once(PLUGIN_DIR . 'public/models/class.forum-model.php');
@@ -65,11 +66,11 @@ class SimpleForum {
     // Redirecion usando js
     public static function redirect_to_view($view) {
         $url = SimpleForum::view_url($view);
-        return SimpleForum::redirect_to($url);
+        return SimpleForum::redirect_to_url($url);
     }
 
     // Redirecion usando js
-    public static function redirect_to($url) {
+    public static function redirect_to_url($url) {
         $string = '<script type="text/javascript">';
         $string .= 'window.location = "' . $url . '"';
         $string .= '</script>';
@@ -195,17 +196,12 @@ class SimpleForum {
         flush_rewrite_rules();
     }
 
-
     public function init_hooks() {
-        $this->check_forbbiden_for_auth();
         $this->start_session();
         add_shortcode('spf_forum', array($this, 'view_controller'));
-    }
-    
-    public function init() {
-        $this->init_hooks();
-        add_action('init', array( $this, 'custom_rewrite_basic' ));
         add_filter('query_vars', array( $this, 'add_custom_query_var'));
+        add_action('init', array( $this, 'custom_rewrite_basic' ));
+        $this->check_forbbiden_for_auth();
 
         wp_enqueue_style('wpb-google-fonts', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,700,300', false);
         

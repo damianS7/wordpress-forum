@@ -6,7 +6,7 @@ class SPF_PostController {
     // Controlador de la vista 'posts.php'
     public static function view_posts() {
         // ID del topic
-        $topic_id = SimpleForum::get_query_var('spf_topic_id');
+        $topic_id = SimpleForum::get_query_var('spf_id');
         
         // Posts por pagina
         $posts_per_page = SimpleForum::get_setting('posts_per_page'); // get from db

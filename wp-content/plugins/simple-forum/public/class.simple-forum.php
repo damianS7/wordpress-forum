@@ -123,17 +123,6 @@ class SimpleForum {
         return $view_url . '/' . $page;
     }
 
-    public function check_forbbiden_for_auth() {
-        // Si estamos en la pagina de login
-        if (strpos($_SERVER['REQUEST_URI'], 'spf-forum/login') !== false) {
-            // y estamos logeados, se hace redirect
-            if (SPF_AccountController::is_auth()) {
-                wp_redirect(SimpleForum::view_url('forums'));
-                exit;
-            }
-        }
-    }
-
     public function add_custom_query_var($vars) {
         $vars[] = 'spf_forum_id';
         $vars[] = 'spf_topic_id';
@@ -201,21 +190,16 @@ class SimpleForum {
         add_shortcode('spf_forum', array($this, 'view_controller'));
         add_filter('query_vars', array( $this, 'add_custom_query_var'));
         add_action('init', array( $this, 'custom_rewrite_basic' ));
-        $this->check_forbbiden_for_auth();
-
-        wp_enqueue_style('wpb-google-fonts', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,700,300', false);
         
         // jQuery
+        wp_enqueue_style('wpb-google-fonts', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,700,300', false);
         wp_register_script('prefix_jquery', 'https://code.jquery.com/jquery-3.4.1.min.js');
         wp_enqueue_script('prefix_jquery');
-
-        wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
-        wp_enqueue_style('prefix_bootstrap');
-        
-        wp_register_style('spf_style', plugins_url('simple-forum/public/includes/css/spf.css'));
-        wp_enqueue_style('spf_style');
-
         wp_register_script('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js');
         wp_enqueue_script('prefix_bootstrap');
+        wp_register_style('prefix_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
+        wp_enqueue_style('prefix_bootstrap');
+        wp_register_style('spf_style', plugins_url('simple-forum/public/includes/css/spf.css'));
+        wp_enqueue_style('spf_style');
     }
 }

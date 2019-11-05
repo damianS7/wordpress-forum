@@ -36,5 +36,5 @@ if (is_admin()) {
 if (!is_admin()) {
     require_once(PLUGIN_DIR . 'public/class.simple-forum.php');
     $public = new SimpleForum();
-    add_action('init', array( $public, 'init_hooks' ));
+    add_action('init', array( $public, 'init' ));
 }

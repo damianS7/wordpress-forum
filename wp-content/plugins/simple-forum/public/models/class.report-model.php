@@ -4,15 +4,16 @@
 class SPF_Report {
     
     // Metodo para agregar reportes en la base de datos
-    public static function add_report($post_id, $report) {
+    public static function add_report($post_id, $report, $reporter_id) {
         global $wpdb;
 
         $table = 'SPF_REPORTS';
         $data = array(
             'post_id' => $post_id,
+            'reporter_id' => $reporter_id,
             'report' => $report
         );
-        $format = array('%d', '%s');
+        $format = array('%d', '%d', '%s');
 
         // Si no se inserta nada, retornamos false
         if (!$wpdb->insert($table, $data, $format)) {

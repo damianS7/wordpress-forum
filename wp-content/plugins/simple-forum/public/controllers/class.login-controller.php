@@ -11,25 +11,42 @@ class SPF_LoginController {
             if (SPF_AccountController::is_auth()) {
                 $data['error_message'] = 'You are already logged.';
                 return SimpleForum::view('login.php', $data);
-                //return SimpleForum::redirect_js(SimpleForum::view_url('forums'));
             }
 
             // Filtrado de variables introducidas por el usuario
-            $user = sanitize_text_field($_POST['username']);
-            $pass = sanitize_text_field($_POST['password']);
+            $username = sanitize_text_field($_POST['username']);
+            $password = sanitize_text_field($_POST['password']);
 
             // Los campos no pueden estar vacios
-            if (empty($user) || empty($pass)) {
+            if (empty($username) || empty($password)) {
                 $data['error_message'] = 'You must fill the fields.';
                 return SimpleForum::view('login.php', $data);
             }
 
-            // Si pasamos con exito todas las comprobaciones, iniciamos el login.
-            if (SPF_AccountController::auth($user, $pass)) {
-                return SimpleForum::redirect_to_view('forums');
-            } else {
-                $data['error_message'] = 'Invalid username/password.';
+            // Buscamos la cuenta de usuario indicada
+            $account = SPF_Account::get_account($username);
+
+            // La cuenta no ha sido encontrada
+            if ($account === null) {
+                $data['error_message'] = 'Invalid username.';
+                return SimpleForum::view('login.php', $data);
             }
+
+            // El password no coincide
+            if (!password_verify($password, $account->password)) {
+                $data['error_message'] = 'Invalid password.';
+                return SimpleForum::view('login.php', $data);
+            }
+
+            // Cuenta no activada
+            if ($account->activated == '0') {
+                $data['error_message'] = 'Account is not activated.';
+                return SimpleForum::view('login.php', $data);
+            }
+
+            // Autentificado con exito
+            $_SESSION['account'] = $account;
+            return SimpleForum::redirect_to_view('forums');
         }
 
         return SimpleForum::view('login.php', $data);

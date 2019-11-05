@@ -1,6 +1,6 @@
 <?php
 
-class SPF_AdminForumController {
+class SPF_Admin_ForumController {
 
     // Controlador de la vista "forums"
     public function view_forums() {

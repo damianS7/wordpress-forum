@@ -58,6 +58,7 @@ class SPF_Forum {
     public static function get_posts($topic_id = 1, $limit = 0, $offset = 3) {
         global $wpdb;
         $query = "SELECT
+            SPF_POSTS.id,
             SPF_POSTS.post_content, 
             SPF_POSTS.posted_at, 
             SPF_ACCOUNTS.username 

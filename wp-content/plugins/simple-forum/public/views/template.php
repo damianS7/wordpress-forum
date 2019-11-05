@@ -18,7 +18,7 @@
     </div>
 
     <div id="messages" class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 mt-3">
             <?php include_once(PLUGIN_DIR . 'public/includes/message.php'); ?>
         </div>
     </div>

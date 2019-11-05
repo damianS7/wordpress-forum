@@ -15,6 +15,7 @@
           on <?php echo $post->posted_at; ?>
         </h4>
         <p class="card-text"><?php echo $post->post_content; ?></p>
+        <a href="<?php echo SimpleForum::view_url('report', $post->id); ?>" class="card-link">Report</a>
       </div>
     <?php endforeach; ?>
   </div>

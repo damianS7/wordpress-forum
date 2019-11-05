@@ -52,11 +52,23 @@ class SimpleForumInstall {
             PRIMARY KEY(name)
         ) ENGINE=InnoDB;';
 
+        $query_reports = 'CREATE TABLE IF NOT EXISTS SPF_REPORTS (
+            id INT AUTO_INCREMENT NOT NULL,
+            post_id INT NOT NULL,
+            reporter_id INT NOT NULL,
+            report TEXT NOT NULL,
+            reported_at TIMESTAMP NOT NULL,
+            PRIMARY KEY(id),
+            FOREIGN KEY(post_id) REFERENCES SPF_POSTS(id),
+            FOREIGN KEY(reporter_id) REFERENCES SPF_ACCOUNTS(id)
+        ) ENGINE=InnoDB;';
+
         $wpdb->query($query_accounts);
         $wpdb->query($query_forums);
         $wpdb->query($query_topics);
         $wpdb->query($query_posts);
         $wpdb->query($query_settings);
+        $wpdb->query($query_reports);
         
         // Preparamos la pagina para cargar nuestro plugin
         $shortcode_page = array(

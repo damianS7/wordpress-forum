@@ -12,6 +12,8 @@ class SimpleForumInstall {
             username VARCHAR(50) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             email VARCHAR(100) NOT NULL UNIQUE,
+            banned INT NOT NULL DEFAULT (0),
+            activated INT NOT NULL DEFAULT (0),
             PRIMARY KEY(id)
         ) ENGINE=InnoDB;';
 
@@ -69,14 +71,18 @@ class SimpleForumInstall {
         $id = wp_insert_post($shortcode_page);
 
         // Si el $id no es null, sera un numero que contiene el id del post en la db
-        if ($id !== null) {
-            $data = array(
-                'name' => 'plugin_page_id',
-                'value' => $id
-            );
-            // Guardamos el id en las opciones del plugin
-            $wpdb->insert('SPF_SETTINGS', $data, array('%s', '%s'));
+        if ($id === null) {
+            $id = 'missing id.';
         }
+
+        $data = array(
+            array('name' => 'plugin_page_id', 'value' => $id),
+            array('name' => 'topics_per_page', 'value' => '10'),
+            array('name' => 'posts_per_page', 'value' => '10'),
+        );
+        
+        // Guardamos el id en las opciones del plugin
+        $wpdb->insert('SPF_SETTINGS', $data, array('%s', '%s'));
     }
 
     // Desactivar y borrar plugin

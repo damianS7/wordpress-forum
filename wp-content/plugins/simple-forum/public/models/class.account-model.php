@@ -32,7 +32,7 @@ class SPF_Account {
     // Esta funcion devuelve una unica file que contiene informacion del usuario
     public static function get_account($username) {
         global $wpdb;
-        $query = "SELECT id, username, password, email 
+        $query = "SELECT id, username, password, email, banned, activated 
             FROM SPF_ACCOUNTS 
             WHERE username = '{$username}'";
 

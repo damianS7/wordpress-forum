@@ -19,20 +19,19 @@
 <?php if (isset($data['reports'])): ?>
 <?php foreach ($data['reports'] as $report): ?>
 <tr>
-  <form class="form-inline" action="" method="post">
     <td><?php echo $report->post_owner; ?></td>
     <td><textarea class="form-control" rows="6"><?php echo $report->post_content; ?></textarea></td>
     <td><textarea class="form-control" rows="6"><?php echo $report->reason; ?></textarea></td>
     <td>
             <div class="input-group">
                 <span class="input-group-btn">
+  <form class="form-inline" action="" method="post">
                     <button type="submit" name="ban_account" class="btn btn-success btn-sm btn-block mb-1">BAN AUTHOR <i class="fa fa-angle-right"></i></button>
-                    <button type="submit" name="update_account" class="btn btn-success btn-sm btn-block mb-1">DELETE POST <i class="fa fa-angle-right"></i></button>
-                    <button type="submit" name="update_account" class="btn btn-success btn-sm btn-block mb-1">OPEN TOPIC <i class="fa fa-angle-right"></i></button>
+                    <a href="<?php echo home_url() . '/spf-forum/posts/' . $report->topic_id . '/1'; ?>">Open topic</a>
                 </span>
             </div>
-            <input type="hidden" name="account_id" value="<?php echo $report->id; ?>">
-            <input type="hidden" name="banned" value="<?php echo $report->id; ?>">
+            <input type="hidden" name="account_id" value="<?php echo $report->reporter_id; ?>">
+            <input type="hidden" name="report_id" value="<?php echo $report->id; ?>">
         </form>
     </td>
 </tr>
@@ -42,5 +41,6 @@
 </table>
   </div>
 </div>
+
 
 

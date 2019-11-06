@@ -11,6 +11,7 @@ require_once(PLUGIN_DIR . 'public/controllers/class.reset-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.login-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.logout-controller.php');
 require_once(PLUGIN_DIR . 'public/controllers/class.forum-controller.php');
+require_once(PLUGIN_DIR . 'includes/class.pagination.php');
 require_once(PLUGIN_DIR . 'public/models/class.account-model.php');
 require_once(PLUGIN_DIR . 'public/models/class.forum-model.php');
 require_once(PLUGIN_DIR . 'public/models/class.report-model.php');

@@ -15,7 +15,7 @@
           on <?php echo $post->posted_at; ?>
         </h4>
         <?php if ($post->banned == '1'): ?>
-          <i class="card-text">This message is hidden because the owner is banned.</i>
+          <p><i class="card-text ">This message is hidden because the owner is banned.</i></p>
         <?php else: ?>
           <p class="card-text"><?php echo $post->post_content; ?></p>
         <?php endif; ?>

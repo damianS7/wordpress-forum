@@ -20,6 +20,7 @@ class SPF_AccountController {
         }
     }
 
+    // Metodo para comprobar si el usuario esta baneado.
     public static function is_banned() {
         if ($_SESSION['account']->banned == '1') {
             return true;

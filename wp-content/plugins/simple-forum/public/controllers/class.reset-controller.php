@@ -1,10 +1,9 @@
 <?php
 
-// Gestiona las vistas relacionadas con cuentas de usuario sigin/signup/reset
+// Controlador para la vista que cambia el password de una cuenta. 'reset.php'
 class SPF_ResetController {
     
-
-    // Controlador para la vista que cambia el password de una cuenta. 'reset.php'
+    // Metodo que controla la logica principal de la vista
     public static function view_reset() {
     }
 }

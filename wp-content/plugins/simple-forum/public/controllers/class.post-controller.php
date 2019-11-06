@@ -5,8 +5,22 @@ class SPF_PostController {
 
     // Controlador de la vista 'posts.php'
     public static function view_posts() {
+        // Comprobando si se ha enviado un nuevo posts
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = SPF_PostController::handle_forms();
+        }
+        
         // ID del topic
         $topic_id = SimpleForum::get_query_var('spf_id');
+
+        // Informacion del topic
+        $data['topic'] = SPF_Forum::get_topic($topic_id);
+
+        // Si el topic no existe ...
+        if ($data['topic'] === null) {
+            // Mostramos una vista en blanco con el error.
+            return SimpleForum::view('blank.php', array('error_message'=>'Unkown topic.'));
+        }
         
         // Posts por pagina
         $posts_per_page = SimpleForum::get_setting('posts_per_page'); // get from db
@@ -30,44 +44,46 @@ class SPF_PostController {
         // Offset desde que empezamos a leer resultados de la tabla
         $offset = ($page - 1) * $posts_per_page;
                 
-        // Informacion del topic
-        $data['topic'] = SPF_Forum::get_topic($topic_id);
-        
         // Posts del topic
         $data['posts'] = SPF_Forum::get_posts($topic_id, $posts_per_page, $offset);
         
         // Datos de paginacion
-        $data['pagination'] = SPF_ForumController::get_pagination($pages, $page);
+        $data['pagination'] = SPF_Pagination::get_pagination($pages, $page);
 
-        // Comprobando si se ha enviado un nuevo posts
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Si el usuario no esta logeado no puede crear topics
-            if (!SPF_AccountController::is_auth()) {
-                $data['error_message'] = 'You are not logged.';
-                return SimpleForum::view('posts.php', $data);
-            }
+        return SPF_PostController::render($data);
+    }
 
-            if (SPF_AccountController::is_banned()) {
-                $data['error_message'] = 'You are banned.';
-                return SimpleForum::view('posts.php', $data);
-            }
-
-            // ID del usuario
-            $user_id = $_SESSION['account']->id;
-
-            // Filtrado de seguridad del post enviado por el usuario
-            $content = sanitize_text_field($_POST['content']);
-
-            // Comprobamos que los campos no esten vacios
-            if (!empty($topic_id) && !empty($content)) {
-                // Si el post no puede ser creado ...
-                if (!SPF_Forum::create_post($topic_id, $user_id, $content)) {
-                    $data['error_message'] = 'Post has not been created.';
-                    return SimpleForum::view('posts.php', $data);
-                }
-            }
+    // Metodo para procesar los formularios (POST)
+    public static function handle_forms() {
+        // Si el usuario no esta logeado no puede crear topics
+        if (!SPF_AccountController::is_auth()) {
+            return array('error_message' => 'You are not logged.');
         }
 
+        if (SPF_AccountController::is_banned()) {
+            return array('error_message' => 'You are banned.');
+        }
+
+        // ID del usuario
+        $user_id = $_SESSION['account']->id;
+
+        // Topic
+        $topic_id = SimpleForum::get_query_var('spf_id');
+
+        // Filtrado de seguridad del post enviado por el usuario
+        $content = sanitize_text_field($_POST['content']);
+
+        // Comprobamos que los campos no esten vacios
+        if (!empty($topic_id) && !empty($content)) {
+            // Si el post no puede ser creado ...
+            if (!SPF_Forum::create_post($topic_id, $user_id, $content)) {
+                return array('error_message' => 'Post has not been created.');
+            }
+        }
+    }
+
+    // Metodo para renderizar la vista.
+    public static function render($data = array()) {
         return SimpleForum::view('posts.php', $data);
     }
 }

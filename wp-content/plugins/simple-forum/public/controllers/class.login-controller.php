@@ -1,54 +1,63 @@
 <?php
 
-// Gestiona las vistas relacionadas con cuentas de usuario sigin/signup/reset
+// Controlador de la vista 'login.php'
 class SPF_LoginController {
-
-    // Controlador de la vista 'login.php'
     public static function view_login() {
-        $data = array();
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Si el usuario no esta logeado no puede crear topics
-            if (SPF_AccountController::is_auth()) {
-                $data['error_message'] = 'You are already logged.';
-                return SimpleForum::view('login.php', $data);
-            }
-
-            // Filtrado de variables introducidas por el usuario
-            $username = sanitize_text_field($_POST['username']);
-            $password = sanitize_text_field($_POST['password']);
-
-            // Los campos no pueden estar vacios
-            if (empty($username) || empty($password)) {
-                $data['error_message'] = 'You must fill the fields.';
-                return SimpleForum::view('login.php', $data);
-            }
-
-            // Buscamos la cuenta de usuario indicada
-            $account = SPF_Account::get_account($username);
-
-            // La cuenta no ha sido encontrada
-            if ($account === null) {
-                $data['error_message'] = 'Invalid username.';
-                return SimpleForum::view('login.php', $data);
-            }
-
-            // El password no coincide
-            if (!password_verify($password, $account->password)) {
-                $data['error_message'] = 'Invalid password.';
-                return SimpleForum::view('login.php', $data);
-            }
-
-            // Cuenta no activada
-            if ($account->activated == '0') {
-                $data['error_message'] = 'Account is not activated.';
-                return SimpleForum::view('login.php', $data);
-            }
-
-            // Autentificado con exito
-            $_SESSION['account'] = $account;
-            return SimpleForum::redirect_to_view('forums');
+        // Si el usuario esta auth ...
+        if (SPF_AccountController::is_auth()) {
+            $data['error_message'] = 'You are already logged.';
+            return SimpleForum::view('blank.php', $data);
         }
 
+        // Si el usuario envia datos para actualizar su cuenta ...
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            return SPF_LoginController::render(SPF_LoginController::handle_forms());
+        }
+        
+        return SPF_LoginController::render();
+    }
+
+    // Metodo para procesar los formularios (POST)
+
+    public static function handle_forms() {
+        // Filtrado de variables introducidas por el usuario
+        $username = sanitize_text_field($_POST['username']);
+        $password = sanitize_text_field($_POST['password']);
+
+        // Los campos no pueden estar vacios
+        if (empty($username) || empty($password)) {
+            $data['error_message'] = 'You must fill the fields.';
+            return $data;
+        }
+
+        // Buscamos la cuenta de usuario indicada
+        $account = SPF_Account::get_account($username);
+
+        // La cuenta no ha sido encontrada
+        if ($account === null) {
+            $data['error_message'] = 'Invalid username.';
+            return $data;
+        }
+
+        // El password no coincide
+        if (!password_verify($password, $account->password)) {
+            $data['error_message'] = 'Invalid password.';
+            return $data;
+        }
+
+        // Cuenta no activada
+        if ($account->activated == '0') {
+            $data['error_message'] = 'Account is not activated.';
+            return $data;
+        }
+
+        // Autentificado con exito
+        $_SESSION['account'] = $account;
+        return SimpleForum::redirect_to_view('forums');
+    }
+
+    // Metodo para renderizar la vista.
+    public static function render($data = array()) {
         return SimpleForum::view('login.php', $data);
     }
 }

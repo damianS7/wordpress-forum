@@ -1,16 +1,26 @@
 <?php
 
-// Gestiona las vistas relacionadas con el foro. listado de foros/topics/posts
+// Controlador de la vista "search.php"
 class SPF_SearchController {
-
-    // Controlador de la vista "search.php"
+    
+    // Metodo que controla la logica principal de la vista
     public static function view_search() {
-        // Lectura de los datos enviados por el usuario
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data['search'] = sanitize_text_field($_POST['query']);
-            $data['topics'] = SPF_Forum::search_topics($data['search']);
+            return SPF_SearchController::render(SPF_SearchController::handle_forms());
         }
+        
+        return SPF_SearchController::render();
+    }
 
+    // Metodo para procesar los formularios (POST)
+    public static function handle_forms() {
+        $data['search'] = sanitize_text_field($_POST['query']);
+        $data['topics'] = SPF_Forum::search_topics($data['search']);
+        return $data;
+    }
+
+    // Metodo para renderizar la vista.
+    public static function render($data = array()) {
         return SimpleForum::view('search.php', $data);
     }
 }

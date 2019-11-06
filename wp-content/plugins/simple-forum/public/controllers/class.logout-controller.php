@@ -11,6 +11,6 @@ class SPF_LogoutController {
             SPF_AccountController::logout();
         }
 
-        SimpleForum::redirect_to_view('login');
+        return SimpleForum::redirect_to_view('login');
     }
 }

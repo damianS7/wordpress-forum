@@ -1,6 +1,8 @@
 <?php
 
+// Esta clase interactua con la tabla "SPF_REPORTS"
 class SPF_Admin_Report {
+    // Este metodo obtiene todos los reportes disponibles
     public static function get_reports() {
         global $wpdb;
         $query = "SELECT
@@ -19,6 +21,7 @@ class SPF_Admin_Report {
         return $wpdb->get_results($query);
     }
 
+    // Este metodo borra un reporte
     public static function delete_report($report_id) {
         global $wpdb;
         $where = array(

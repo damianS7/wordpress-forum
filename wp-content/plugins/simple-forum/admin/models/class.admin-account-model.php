@@ -1,13 +1,15 @@
 <?php
 
+// Clase para interacturar con la tabla "SPF_ACCOUNTS"
 class SPF_Admin_Account {
+    // Metodo para obtener todas las cuentas de la tabla
     public static function get_accounts() {
         global $wpdb;
         $query = "SELECT * FROM SPF_ACCOUNTS";
         return $wpdb->get_results($query);
     }
 
-    // Esta funcion devuelve una unica file que contiene informacion del usuario
+    // Esta metodo devuelve las filas que contiene informacion del usuario indicado
     public static function get_account($username) {
         global $wpdb;
         $query = "SELECT *
@@ -17,13 +19,14 @@ class SPF_Admin_Account {
         return $wpdb->get_results($query);
     }
 
+    // Este metodo borra una cuenta. Retorna false si no se borra la cuenta indicada.
     public static function delete_account($account_id) {
         global $wpdb;
         $where = array(
             'id' => $account_id
         );
 
-        // Si no se borra nada
+        // Si no se consigue borrar ...
         if (!$wpdb->delete('SPF_ACCOUNTS', $where)) {
             return false;
         }
@@ -31,6 +34,8 @@ class SPF_Admin_Account {
         return true;
     }
 
+    // Este metodo actualiza la tabla con los datos indicados en $data y $where.
+    // Retorna false si no se puede actualizar.
     public static function update_account($data, $where) {
         global $wpdb;
         
@@ -40,6 +45,8 @@ class SPF_Admin_Account {
         return true;
     }
 
+    // Actualiza el nombre de usuario y email de una cuenta.
+    // Retorna false si no se puede actualizar
     public static function update_account_info($account_id, $username, $mail) {
         $data = array(
             'email' => $mail,
@@ -52,6 +59,7 @@ class SPF_Admin_Account {
         return SPF_Admin_Account::update_account($data, $where);
     }
 
+    // Banea una cuenta de usuario. Retorna false si no es posible banear la cuenta.
     public static function ban_account($account_id) {
         $data = array(
             'banned' => '1'
@@ -64,6 +72,8 @@ class SPF_Admin_Account {
         return SPF_Admin_Account::update_account($data, $where);
     }
 
+
+    // Quita el ban a una cuenta. Retorna false si hay un error.
     public static function unban_account($account_id) {
         $data = array(
             'banned' => '0'
@@ -76,7 +86,8 @@ class SPF_Admin_Account {
         return SPF_Admin_Account::update_account($data, $where);
     }
 
-    public static function confirm_account($account_id) {
+    // Activa una cuenta de usuario. Retorna false si no consigue activarse.
+    public static function activate_account($account_id) {
         $data = array(
             'activated' => 1
         );
@@ -88,7 +99,8 @@ class SPF_Admin_Account {
         return SPF_Admin_Account::update_account($data, $where);
     }
 
-    public static function reset_password($account_id, $password) {
+    // Actualiza el password de una cuenta de usuario. Retorna false si no puede.
+    public static function update_password($account_id, $password) {
         $data = array(
             'password' => $password
         );

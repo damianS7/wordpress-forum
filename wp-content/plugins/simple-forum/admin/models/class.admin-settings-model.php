@@ -1,5 +1,6 @@
 <?php
 
+// Esta clase interaccion con la tabla "SPF_SETTINGS"
 class SPF_AdminSetting {
     public static function get_settings() {
         global $wpdb;
@@ -7,7 +8,7 @@ class SPF_AdminSetting {
         return $wpdb->get_results($query);
     }
 
-    // Este metodo crea un foro en la db
+    // Este metodo actualiza el valor de una opcion
     public static function update_setting($name, $value) {
         global $wpdb;
         

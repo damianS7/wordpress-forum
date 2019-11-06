@@ -1,17 +1,21 @@
 # SPF (Simple Forum)
-SPF es un plugin para wordpress que implementa un foro simple pero funcional con las siguientes funcionalidades:
-- Login/Registro propio
-- Theme en bootstrap (No necesita instalacion en el directorio themes)
-- Panel de administracion para gestionar el foro
+SimpleForum es un plugin cuya finalidad es la de implementar un foro en Wordpress.
 
 ## Instalacion
-Aunque el plugin crea las paginas necesarias de manera automatica al instalarse es posible utilizar el plugin en otros lugares de tu sitio mediante la utilizacion de shortccodes
-[show_spf_forums]
-[show_spf_topics]
-[show_spf_login]
+El plugin instala todo lo necesario a la hora de su activacion
 
-Una vez activado el plugin, puedes agregar las paginas a tu menu para acceder a ellas.
+### Requisitos
+- Habilitar mod_rewrite en apache2
+- Habilitar la opcion "Nombre de la entrada" del menu Ajustes > enlace permanente 
+- Version actualizada de Wordpress.
 
-## Requisitos
-- Habilitar mod_rewrite de apache2
+### Funcionalidades
+- Sistema de Usuarios con Login/Registro propio. (Las cuentas de usuario se activan desde el pane de administrador)
+- El plugin utiliza Bootstrap 4 para implementar el frontend
+- Administracion del foro a traves del Backend.
+- Baneo de usuarios
+- Reporte de posts
+- Paginacion
 
+### Por implementar
+- Reset de password desde el frontend

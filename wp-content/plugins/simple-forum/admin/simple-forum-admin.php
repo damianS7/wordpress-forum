@@ -8,31 +8,35 @@ require_once(PLUGIN_DIR . 'admin/models/class.admin-report-model.php');
 require_once(PLUGIN_DIR . 'admin/models/class.admin-account-model.php');
 require_once(PLUGIN_DIR . 'admin/models/class.admin-settings-model.php');
 
+// Esta clase contiene la configuracion de backend.
 class SimpleForumAdmin {
-    private $forum_controller;
-    private $report_controller;
+    private $forums_controller;
+    private $reports_controller;
     private $settings_controller;
-    private $account_controller;
+    private $accounts_controller;
 
     public function __construct() {
-        $this->forums_controller = new SPF_Admin_ForumController();
-        $this->accounts_controller = new SPF_Admin_AccountController();
+        $this->forums_controller = new SPF_Admin_ForumsController();
+        $this->accounts_controller = new SPF_Admin_AccountsController();
         $this->settings_controller = new SPF_Admin_SettingsController();
-        $this->report_controller = new SPF_Admin_ReportController();
+        $this->reports_controller = new SPF_Admin_ReportsController();
     }
 
+    // Metodo que configura el menu
     public function plugin_menu() {
         add_menu_page('SimpleForum', 'Simple Forum', 'manage_options', 'simpleforum-menu', array($this->settings_controller, 'view_settings'));
         add_submenu_page('simpleforum-menu', 'SimpleForum', 'Accounts', 'manage_options', 'simpleforum-accounts', array($this->accounts_controller, 'view_accounts' ));
         add_submenu_page('simpleforum-menu', 'SimpleForum', 'Forums', 'manage_options', 'simpleforum-forums', array($this->forums_controller, 'view_forums'));
-        add_submenu_page('simpleforum-menu', 'SimpleForum', 'Reports', 'manage_options', 'simpleforum-report', array($this->report_controller, 'view_reports' ));
+        add_submenu_page('simpleforum-menu', 'SimpleForum', 'Reports', 'manage_options', 'simpleforum-report', array($this->reports_controller, 'view_reports' ));
         add_submenu_page('simpleforum-menu', 'SimpleForum', 'Settings', 'manage_options', 'simpleforum-settings', array($this->settings_controller, 'view_settings'));
     }
 
+    // Muestra una vista en el template
     public static function view($view, $data) {
         include_once(PLUGIN_DIR . 'admin/views/template.php');
     }
 
+    // Metodo de inicio de la aplicacion
     public function init() {
         add_action('admin_menu', array( $this, 'plugin_menu' ));
 

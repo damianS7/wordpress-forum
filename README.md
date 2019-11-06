@@ -19,3 +19,12 @@ El plugin instala todo lo necesario a la hora de su activacion
 
 ### Por implementar
 - Reset de password desde el frontend
+
+### Imagenes
+![alt text](https://raw.githubusercontent.com/damianS7/wordpress-forum/master/wp-content/plugins/simple-forum/images/forums.png)
+![alt text](https://raw.githubusercontent.com/damianS7/wordpress-forum/master/wp-content/plugins/simple-forum/images/topics.png)
+![alt text](https://raw.githubusercontent.com/damianS7/wordpress-forum/master/wp-content/plugins/simple-forum/images/posts.png)
+![alt text](https://raw.githubusercontent.com/damianS7/wordpress-forum/master/wp-content/plugins/simple-forum/images/login.png)
+![alt text](https://raw.githubusercontent.com/damianS7/wordpress-forum/master/wp-content/plugins/simple-forum/images/register.png)
+![alt text](https://raw.githubusercontent.com/damianS7/wordpress-forum/master/wp-content/plugins/simple-forum/images/profile.png)
+![alt text](https://raw.githubusercontent.com/damianS7/wordpress-forum/master/wp-content/plugins/simple-forum/images/search.png)

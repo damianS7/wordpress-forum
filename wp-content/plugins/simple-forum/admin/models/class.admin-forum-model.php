@@ -1,6 +1,6 @@
 <?php
 
-class SPF_AdminForum {
+class SPF_Admin_Forum {
     public static function get_forums() {
         global $wpdb;
         $query = "SELECT id, name, description FROM SPF_FORUMS";
@@ -39,6 +39,17 @@ class SPF_AdminForum {
         return true;
     }
 
-    public static function update_forum() {
+    public static function delete_post($post_id) {
+        global $wpdb;
+        $where = array(
+            'id' => $post_id
+        );
+
+        // Si no se borra nada
+        if (!$wpdb->delete('SPF_POSTS', $where)) {
+            return false;
+        }
+
+        return true;
     }
 }

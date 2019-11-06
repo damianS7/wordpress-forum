@@ -69,7 +69,7 @@ class SPF_Admin_AccountsController {
                 
                 // Cambiamos el password
                 if (SPF_Admin_Account::update_password($account_id, $hashed_password)) {
-                    return $data['success_message'] = 'New password for: ' . $username . ' ' . $password;
+                    $data['success_message'] = 'New password for: ' . $username . ' ' . $password;
                 }
             }
         }

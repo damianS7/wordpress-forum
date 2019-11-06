@@ -61,7 +61,8 @@ class SPF_Forum {
             SPF_POSTS.id,
             SPF_POSTS.post_content, 
             SPF_POSTS.posted_at, 
-            SPF_ACCOUNTS.username 
+            SPF_ACCOUNTS.username,
+            SPF_ACCOUNTS.banned 
             FROM SPF_POSTS 
             INNER JOIN SPF_ACCOUNTS 
             ON SPF_POSTS.author_id = SPF_ACCOUNTS.id 

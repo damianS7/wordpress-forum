@@ -14,7 +14,11 @@
           Written by <?php echo $post->username; ?>
           on <?php echo $post->posted_at; ?>
         </h4>
-        <p class="card-text"><?php echo $post->post_content; ?></p>
+        <?php if ($post->banned == '1'): ?>
+          <i class="card-text">This message is hidden because the owner is banned.</i>
+        <?php else: ?>
+          <p class="card-text"><?php echo $post->post_content; ?></p>
+        <?php endif; ?>
         <a href="<?php echo SimpleForum::view_url('report', $post->id); ?>" class="card-link">Report</a>
       </div>
     <?php endforeach; ?>
